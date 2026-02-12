@@ -1,0 +1,51 @@
+<div class="login-container">
+  <div class="login-box">
+    <!-- Logo -->
+    <div class="logo-section">
+      <svg
+        width="50"
+        height="50"
+        viewBox="0 0 50 66"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+        class="logo"
+      >
+        <path
+          d="M0 14.7059C0 6.58405 6.58405 0 14.7059 0V14.7059H0Z"
+          fill="#38AAFE"
+        />
+        <rect x="17.6471" width="14.7059" height="14.7059" fill="#9B51E0" />
+        <path d="M35.2941 0H50V14.7059H35.2941V0Z" fill="#38AAFE" />
+        <path
+          d="M35.2941 18.3823H50C50 26.5042 43.4159 33.0882 35.2941 33.0882V18.3823Z"
+          fill="#9B51E0"
+        />
+        <rect x="17.6471" y="18.3823" width="14" height="14" fill="#E1AFFD" />
+        <path d="M0 18.3823H14.7059V33.0882H0V18.3823Z" fill="#9B51E0" />
+        <path d="M0 33.0882H14.7059V47.7941H0V33.0882Z" fill="#9B51E0" />
+        <path
+          d="M14.7059 50.7354H-2.86102e-06C-2.86102e-06 58.8572 6.58405 65.4412 14.7059 65.4412V50.7354Z"
+          fill="#E1AFFD"
+        />
+      </svg>
+      <h1 class="title">PLUGZ Academia</h1>
+      <p class="subtitle">Welcome Back</p>
+    </div>
+
+    <!-- Loader Section -->
+    <div *ngIf="loading" class="auth-loading text-center my-4">
+      <div class="spinner-border text-primary mb-3" role="status"></div>
+      <p class="loading-text">{{ loadingMessage }}</p>
+    </div>
+
+    <!-- Optional Link -->
+    <div class="text-center mt-4">
+      <a href="https://plugz.africa/dashboard" class="small text-muted"
+        >Go to Apps</a
+      >
+    </div>
+
+    <!-- Footer -->
+    <p class="footer-text">© 2024 PLUGZ Academia</p>
+  </div>
+</div>

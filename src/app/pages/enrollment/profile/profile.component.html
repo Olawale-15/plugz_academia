@@ -1,0 +1,430 @@
+<div class="student-profile-container mt-4">
+  <div class="card">
+    <div class="card-body">
+      <!-- Header Section with Search and New Button -->
+      <div class="profile-header">
+        <div class="search-section">
+          <div class="search-container">
+            <!-- Search by filter -->
+            <select class="search-filter" [(ngModel)]="searchFilter">
+              <option
+                *ngFor="let filter of searchFilters"
+                [value]="filter.value"
+              >
+                {{ filter.label }}
+              </option>
+            </select>
+
+            <!-- Search text -->
+            <div class="search-input-wrapper">
+              <app-icon [icon]="'search'" class="search-icon"></app-icon>
+              <input
+                type="text"
+                class="search-input"
+                placeholder="Search enrollments..."
+                [(ngModel)]="searchQuery"
+                (keyup.enter)="onSearch()"
+              />
+            </div>
+
+            <!-- Search button -->
+            <button
+              class="btn-search"
+              (click)="onSearch()"
+              [disabled]="loadingStudents"
+            >
+              {{ loadingStudents ? "Searching..." : "Search" }}
+            </button>
+          </div>
+        </div>
+
+        <!-- New Registration button -->
+        <button class="btn-new" (click)="onNewStudent()">
+          <app-icon [icon]="'plus'" class="btn-icon"></app-icon>
+          New Students
+        </button>
+      </div>
+
+      <!-- PrimeNG Table -->
+      <app-prime-table
+        [data]="filteredStudents"
+        [columns]="columns"
+        [actions]="actions"
+        [rows]="10"
+        [rowsPerPageOptions]="[10, 25, 50]"
+        [paginator]="true"
+        [striped]="true"
+        [loading]="loadingStudents"
+        [globalFilterFields]="['name', 'studentId', 'email', 'grade']"
+      >
+        <!-- Custom Body Template for Status Column -->
+        <ng-template #bodyTemplate let-rowData let-field="field">
+          <ng-container [ngSwitch]="field">
+            <ng-container *ngSwitchCase="'photoUrl'">
+              <div class="photo-cell">
+                <img
+                  [src]="rowData.photoUrl || 'assets/avatar-placeholder.png'"
+                  alt="Student photo"
+                  class="student-avatar"
+                />
+              </div>
+            </ng-container>
+
+            <ng-container *ngSwitchCase="'status'">
+              <span
+                class="status-badge"
+                [class.status-active]="rowData.status === 'Active'"
+                [class.status-inactive]="rowData.status === 'Inactive'"
+              >
+                {{ rowData.status }}
+              </span>
+            </ng-container>
+
+            <ng-container *ngSwitchCase="'contactAddress'">
+              <!-- <div class="text-truncate" [title]="rowData.contactAddress">
+        {{ rowData.contactAddress }}
+      </div> -->
+            </ng-container>
+
+            <ng-container *ngSwitchCase="'email'">
+              <!-- <div class="text-truncate" [title]="rowData.email">
+        {{ rowData.email }}
+      </div> -->
+            </ng-container>
+
+            <ng-container *ngSwitchDefault>
+              {{ rowData[field] }}
+            </ng-container>
+          </ng-container>
+        </ng-template>
+      </app-prime-table>
+    </div>
+  </div>
+</div>
+
+<!-- Create/Update Student Modal -->
+<app-modal
+  [isOpen]="isModalOpen"
+  [title]="isEditMode ? 'Update Student' : 'Create New Student'"
+  [size]="'lg'"
+  (onClose)="closeModal()"
+>
+  <div class="modal-body-scroll">
+    <form [formGroup]="studentForm" class="student-form">
+      <div class="form-grid">
+        <!-- Student ID -->
+        <div class="form-group">
+          <label for="studentId"
+            >Student ID <span class="required">*</span></label
+          >
+          <input
+            type="text"
+            id="studentId"
+            class="form-control"
+            formControlName="studentId"
+            [class.invalid]="isFieldInvalid('studentId')"
+            placeholder="Enter student ID"
+          />
+          <span class="error-message" *ngIf="isFieldInvalid('studentId')"
+            >Student ID is required</span
+          >
+        </div>
+
+        <!-- First Name -->
+        <div class="form-group">
+          <label for="firstname"
+            >First Name <span class="required">*</span></label
+          >
+          <input
+            type="text"
+            id="firstname"
+            class="form-control"
+            formControlName="firstname"
+            [class.invalid]="isFieldInvalid('firstname')"
+            placeholder="Enter first name"
+          />
+          <span class="error-message" *ngIf="isFieldInvalid('firstname')"
+            >First name is required</span
+          >
+        </div>
+
+        <!-- Middle Name -->
+        <div class="form-group">
+          <label for="middlename">Middle Name</label>
+          <input
+            type="text"
+            id="middlename"
+            class="form-control"
+            formControlName="middlename"
+            placeholder="Enter middle name"
+          />
+        </div>
+
+        <!-- Last Name -->
+        <div class="form-group">
+          <label for="lastname"
+            >Last Name <span class="required">*</span></label
+          >
+          <input
+            type="text"
+            id="lastname"
+            class="form-control"
+            formControlName="lastname"
+            [class.invalid]="isFieldInvalid('lastname')"
+            placeholder="Enter last name"
+          />
+          <span class="error-message" *ngIf="isFieldInvalid('lastname')"
+            >Last name is required</span
+          >
+        </div>
+
+        <!-- Date of Birth -->
+        <div class="form-group">
+          <label for="dateOfBirth"
+            >Date of Birth <span class="required">*</span></label
+          >
+          <input
+            type="date"
+            id="dateOfBirth"
+            class="form-control"
+            formControlName="dateOfBirth"
+            [class.invalid]="isFieldInvalid('dateOfBirth')"
+          />
+          <span class="error-message" *ngIf="isFieldInvalid('dateOfBirth')"
+            >Date of birth is required</span
+          >
+        </div>
+
+        <!-- Gender -->
+        <div class="form-group">
+          <label for="gender">Gender <span class="required">*</span></label>
+          <ng-select
+            id="gender"
+            class="custom-ng-select"
+            formControlName="gender"
+            [items]="genders"
+            bindLabel="referenceName"
+            bindValue="referenceId"
+            placeholder="Select gender"
+            [clearable]="true"
+            [searchable]="true"
+            [class.invalid]="isFieldInvalid('gender')"
+          >
+          </ng-select>
+          <span class="error-message" *ngIf="isFieldInvalid('gender')"
+            >Gender is required</span
+          >
+        </div>
+
+        <!-- Email -->
+        <div class="form-group">
+          <label for="email">Email <span class="required">*</span></label>
+          <input
+            type="email"
+            id="email"
+            class="form-control"
+            formControlName="email"
+            [class.invalid]="isFieldInvalid('email')"
+            placeholder="Enter email"
+          />
+          <span class="error-message" *ngIf="isFieldInvalid('email')"
+            >Valid email is required</span
+          >
+        </div>
+
+        <!-- Alternate Email -->
+        <div class="form-group">
+          <label for="alternateEmail">Alternate Email</label>
+          <input
+            type="email"
+            id="alternateEmail"
+            class="form-control"
+            formControlName="alternateEmail"
+            placeholder="Enter alternate email"
+          />
+        </div>
+
+        <!-- Telephone -->
+        <div class="form-group">
+          <label for="telephone"
+            >Telephone <span class="required">*</span></label
+          >
+          <input
+            type="tel"
+            id="telephone"
+            class="form-control"
+            formControlName="telephone"
+            [class.invalid]="isFieldInvalid('telephone')"
+            placeholder="Enter telephone"
+          />
+          <span class="error-message" *ngIf="isFieldInvalid('telephone')"
+            >Telephone is required</span
+          >
+        </div>
+
+        <!-- Alternate Telephone -->
+        <div class="form-group">
+          <label for="alternateTelephone">Alternate Telephone</label>
+          <input
+            type="tel"
+            id="alternateTelephone"
+            class="form-control"
+            formControlName="alternateTelephone"
+            placeholder="Enter alternate telephone"
+          />
+        </div>
+
+        <!-- Contact Address -->
+        <div class="form-group full-width">
+          <label for="contactAddress"
+            >Contact Address <span class="required">*</span></label
+          >
+          <textarea
+            id="contactAddress"
+            class="form-control"
+            formControlName="contactAddress"
+            [class.invalid]="isFieldInvalid('contactAddress')"
+            rows="3"
+            placeholder="Enter contact address"
+          ></textarea>
+          <span class="error-message" *ngIf="isFieldInvalid('contactAddress')"
+            >Contact address is required</span
+          >
+        </div>
+
+        <!-- Enrollment Date -->
+        <div class="form-group">
+          <label for="enrollmentDate"
+            >Enrollment Date <span class="required">*</span></label
+          >
+          <input
+            type="date"
+            id="enrollmentDate"
+            class="form-control"
+            formControlName="enrollmentDate"
+            [class.invalid]="isFieldInvalid('enrollmentDate')"
+          />
+          <span class="error-message" *ngIf="isFieldInvalid('enrollmentDate')"
+            >Enrollment date is required</span
+          >
+        </div>
+
+        <!-- Student Status -->
+        <div class="form-group">
+          <label for="studentStatus"
+            >Status <span class="required">*</span></label
+          >
+          <ng-select
+            id="studentStatus"
+            class="custom-ng-select"
+            formControlName="studentStatus"
+            [items]="studentStatuses"
+            bindLabel="referenceName"
+            bindValue="referenceId"
+            placeholder="Select status"
+            [clearable]="true"
+            [searchable]="true"
+            [class.invalid]="isFieldInvalid('studentStatus')"
+          >
+          </ng-select>
+          <span class="error-message" *ngIf="isFieldInvalid('studentStatus')"
+            >Status is required</span
+          >
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <!-- Modal Footer -->
+  <div modal-footer>
+    <button
+      class="btn btn-cancel"
+      (click)="closeModal()"
+      [disabled]="isLoading"
+      type="button"
+    >
+      Cancel
+    </button>
+    <button
+      class="btn btn-primary"
+      (click)="handleSubmit()"
+      [disabled]="isLoading"
+      type="button"
+    >
+      {{
+        isLoading
+          ? isEditMode
+            ? "Updating..."
+            : "Creating..."
+          : isEditMode
+            ? "Update Student"
+            : "Create Student"
+      }}
+    </button>
+  </div>
+</app-modal>
+
+<!-- Update Student Status Modal -->
+<app-modal
+  [isOpen]="isStatusModalOpen"
+  [title]="'Update Student Status'"
+  [size]="'md'"
+  (onClose)="closeStatusModal()"
+>
+  <div *ngIf="selectedStudent" class="status-modal-content">
+    <div class="student-info">
+      <h3>{{ selectedStudent.name }}</h3>
+      <div class="info-grid">
+        <div class="info-item">
+          <span class="label">Student ID:</span>
+          <span class="value">{{ selectedStudent.studentId }}</span>
+        </div>
+        <div class="info-item">
+          <span class="label">Email:</span>
+          <span class="value">{{ selectedStudent.email }}</span>
+        </div>
+        <div class="info-item">
+          <span class="label">Phone:</span>
+          <span class="value">{{ selectedStudent.telephone }}</span>
+        </div>
+        <div class="info-item full-width">
+          <label for="statusSelect" class="label"
+            >Current Status: <span class="required">*</span></label
+          >
+          <ng-select
+            id="statusSelect"
+            class="custom-ng-select"
+            [(ngModel)]="selectedStatus"
+            [items]="studentStatuses"
+            bindLabel="referenceName"
+            bindValue="referenceId"
+            placeholder="Select status"
+            [clearable]="false"
+            [searchable]="false"
+          >
+          </ng-select>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Footer -->
+  <div modal-footer>
+    <button
+      class="btn btn-cancel"
+      (click)="closeStatusModal()"
+      [disabled]="isLoading"
+      type="button"
+    >
+      Cancel
+    </button>
+    <button
+      class="btn btn-primary"
+      (click)="toggleStudentStatus()"
+      [disabled]="isLoading || !selectedStudent || !selectedStatus"
+      type="button"
+    >
+      {{ isLoading ? "Updating..." : "Update Status" }}
+    </button>
+  </div>
+</app-modal>

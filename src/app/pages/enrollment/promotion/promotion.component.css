@@ -1,0 +1,750 @@
+/* Container */
+.promotion-container {
+  background-color: #f8f9fb;
+}
+
+.card {
+  border-radius: 7px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  border: none;
+}
+
+.card-body {
+  padding: 24px;
+}
+
+/* Header Section */
+.promotion-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 24px;
+}
+
+.search-section {
+  flex: 1;
+  min-width: 300px;
+}
+
+.search-container {
+  display: flex;
+  align-items: center;
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  white-space: nowrap;
+  flex-wrap: nowrap;
+  max-width: 100%;
+}
+
+.search-container:focus-within {
+  border-color: #9b51e0;
+  box-shadow: 0 0 0 3px rgba(155, 81, 224, 0.1);
+}
+
+.search-filter {
+  padding: 12px 14px;
+  border: none;
+  border-right: 1px solid #e5e7eb;
+  font-size: 14px;
+  background: #f9fafb;
+  color: #374151;
+  cursor: pointer;
+  min-width: 140px;
+  outline: none;
+}
+
+.search-filter,
+.search-input-wrapper,
+.btn-search,
+.btn-refresh {
+  flex-shrink: 0;
+}
+
+.search-filter,
+.search-input,
+.btn-search,
+.btn-refresh {
+  height: 44px;
+}
+
+.search-input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  flex: 1;
+  min-width: 220px;
+}
+
+.search-icon {
+  position: absolute;
+  left: 16px;
+  color: #6b7280;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.search-input {
+  flex: 1;
+  padding: 12px 16px 12px 48px;
+  border: none;
+  font-size: 14px;
+  background: white;
+  outline: none;
+}
+
+.search-input::placeholder {
+  color: #9ca3af;
+}
+
+.btn-search {
+  padding: 12px 24px;
+  background: #f3f4f6;
+  color: #374151;
+  border: none;
+  border-left: 1px solid #e5e7eb;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.btn-search:hover:not(:disabled) {
+  background: #e5e7eb;
+}
+
+.btn-search:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  background: #f9fafb;
+}
+
+.btn-refresh {
+  padding: 12px 14px;
+  background: #f3f4f6;
+  color: #374151;
+  border: none;
+  border-left: 1px solid #e5e7eb;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-refresh:hover:not(:disabled) {
+  background: #e5e7eb;
+}
+
+.btn-refresh:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  background: #f9fafb;
+}
+
+.btn-new {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 24px;
+  background:  #764ba2 100%;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.btn-new:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.btn-icon {
+  font-size: 16px;
+}
+
+/* Loading and Empty States */
+.loading-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+  text-align: center;
+}
+
+.loading-state .spinner-border {
+  margin-bottom: 15px;
+  width: 3rem;
+  height: 3rem;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 40px;
+  color: #6c757d;
+  background: #f9fafb;
+  border-radius: 8px;
+  border: 1px dashed #d1d5db;
+}
+
+.empty-state p {
+  margin-bottom: 16px;
+  font-size: 16px;
+}
+
+.table-info {
+  padding: 8px 0;
+  font-size: 14px;
+  color: #6b7280;
+  margin-bottom: 12px;
+}
+
+/* Status Badges */
+.status-badge {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.status-active {
+  background: #d1fae5;
+  color: #065f46;
+}
+
+.status-inactive {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+/* Form Styles */
+.enrollment-form {
+  padding: 0;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group label {
+  margin-bottom: 8px;
+  font-weight: 500;
+  font-size: 14px;
+  color: #374151;
+}
+
+.required {
+  color: #dc2626;
+}
+
+.form-control {
+  padding: 10px 12px;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  font-size: 14px;
+  transition: all 0.2s ease;
+}
+
+.form-control:focus {
+  outline: none;
+  border-color: #9b51e0;
+  box-shadow: 0 0 0 3px rgba(155, 81, 224, 0.1);
+}
+
+.form-control.is-invalid {
+  border-color: #dc2626;
+}
+
+.form-control:read-only {
+  background-color: #f9fafb;
+  cursor: not-allowed;
+}
+
+.invalid-feedback {
+  margin-top: 4px;
+  font-size: 12px;
+  color: #dc2626;
+  display: block;
+}
+
+/* Modal Footer Buttons */
+.btn {
+  padding: 10px 20px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: 1px solid transparent;
+}
+
+.btn-secondary {
+  background: white;
+  color: #374151;
+  border: 1px solid #d1d5db;
+}
+
+.btn-secondary:hover:not(:disabled) {
+  background: #f9fafb;
+}
+
+.btn-primary {
+  background:  #764ba2 100%;
+  color: white;
+  border: none;
+}
+
+.btn-primary:hover:not(:disabled) {
+  opacity: 0.9;
+}
+
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Status Modal Styles */
+.status-modal-content {
+  padding: 20px 0;
+}
+
+.enrollment-info h3 {
+  margin: 0 0 20px 0;
+  font-size: 20px;
+  font-weight: 600;
+  color: #111827;
+}
+
+.info-grid {
+  display: grid;
+  gap: 16px;
+}
+
+.info-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
+  background: #f9fafb;
+  border-radius: 8px;
+}
+
+.info-item .label {
+  font-weight: 500;
+  color: #6b7280;
+  font-size: 14px;
+}
+
+.info-item .value {
+  font-weight: 500;
+  color: #111827;
+  font-size: 14px;
+}
+
+.info-item .status-badge {
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+/* ng-select custom styling */
+::ng-deep .custom-ng-select {
+  width: 100%;
+}
+
+::ng-deep .custom-ng-select .ng-select-container {
+  min-height: 42px;
+  border-radius: 6px !important;
+  background-color: #ffffff;
+  padding: 0 12px;
+  display: flex;
+  align-items: center;
+  font-size: 0.875rem;
+  border: 1px solid #e5e7eb;
+}
+
+::ng-deep .custom-ng-select .ng-select-container:hover {
+  border-color: #d1d5db;
+}
+
+::ng-deep .custom-ng-select.ng-select-focused .ng-select-container {
+  outline: none;
+  border-color: #9b51e0;
+  box-shadow: 0 0 0 3px rgba(155, 81, 224, 0.1);
+}
+
+::ng-deep .custom-ng-select.is-invalid .ng-select-container {
+  border-color: #dc2626;
+}
+
+::ng-deep .custom-ng-select .ng-value-container {
+  padding: 0;
+  display: flex;
+  align-items: center;
+  height: 100%;
+}
+
+::ng-deep .custom-ng-select .ng-value-container .ng-input {
+  padding: 0;
+  top: 0;
+}
+
+::ng-deep .custom-ng-select .ng-value-container .ng-input > input {
+  padding: 0;
+  font-size: 0.875rem;
+  color: #374151;
+}
+
+::ng-deep .custom-ng-select .ng-value {
+  font-size: 0.875rem;
+  color: #374151;
+}
+
+::ng-deep .custom-ng-select .ng-placeholder {
+  color: #9ca3af;
+  font-size: 0.875rem;
+  line-height: 1;
+}
+
+::ng-deep .custom-ng-select .ng-clear-wrapper {
+  color: #6b7280;
+}
+
+::ng-deep .custom-ng-select .ng-arrow-wrapper {
+  padding: 0;
+}
+
+::ng-deep .custom-ng-select .ng-arrow-wrapper .ng-arrow {
+  border-color: #6b7280 transparent transparent;
+  border-style: solid;
+  border-width: 5px 5px 2.5px;
+}
+
+::ng-deep .custom-ng-select .ng-dropdown-panel {
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  box-shadow:
+    0 4px 6px -1px rgba(0, 0, 0, 0.1),
+    0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  margin-top: 4px;
+}
+
+::ng-deep .custom-ng-select .ng-dropdown-panel-items .ng-option {
+  padding: 0.625rem 0.75rem;
+  font-size: 0.875rem;
+  transition: background-color 0.15s;
+}
+
+::ng-deep .custom-ng-select .ng-dropdown-panel-items .ng-option:hover {
+  background-color: #f3f4f6;
+}
+
+::ng-deep
+  .custom-ng-select
+  .ng-dropdown-panel-items
+  .ng-option.ng-option-selected {
+  background-color: #ede9fe;
+  color: #7c3aed;
+}
+
+::ng-deep
+  .custom-ng-select
+  .ng-dropdown-panel-items
+  .ng-option.ng-option-marked {
+  background-color: #f3f4f6;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .promotion-header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .search-section {
+    min-width: 100%;
+  }
+
+  .search-container {
+    flex-direction: column;
+    align-items: stretch;
+    height: auto;
+  }
+
+  .search-filter,
+  .search-input-wrapper,
+  .btn-search,
+  .btn-refresh {
+    width: 100%;
+    min-width: 100%;
+    height: 44px;
+    border-right: none;
+    border-bottom: 1px solid #e5e7eb;
+    border-radius: 0;
+  }
+
+  .search-filter:first-child {
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+  }
+
+  .btn-search,
+  .btn-refresh {
+    border-top: 1px solid #e5e7eb;
+    border-left: none;
+  }
+
+  .btn-search:last-child,
+  .btn-refresh:last-child {
+    border-bottom-left-radius: 8px;
+    border-bottom-right-radius: 8px;
+  }
+
+  .btn-new {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .info-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .info-item .label {
+    font-size: 13px;
+  }
+
+  .info-item .value {
+    font-size: 14px;
+  }
+}
+
+/* Visually hidden for screen readers */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Table cell alignment fix */
+::ng-deep .p-datatable .p-datatable-tbody > tr > td {
+  vertical-align: middle;
+}
+
+/* Ensure proper spacing in prime table */
+::ng-deep app-prime-table .p-datatable {
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+::ng-deep app-prime-table .p-datatable .p-datatable-thead > tr > th {
+  background-color: #f9fafb;
+  font-weight: 600;
+  color: #374151;
+  border-color: #e5e7eb;
+}
+
+::ng-deep
+  app-prime-table
+  .p-datatable.p-datatable-striped
+  .p-datatable-tbody
+  > tr:nth-child(even) {
+  background-color: #f9fafb;
+}
+
+::ng-deep app-prime-table .p-paginator {
+  background-color: #ffffff;
+  border-color: #e5e7eb;
+}
+
+::ng-deep app-prime-table .p-paginator .p-paginator-element {
+  border-radius: 6px;
+}
+
+::ng-deep app-prime-table .p-paginator .p-paginator-element:hover {
+  background-color: #f3f4f6;
+}
+
+::ng-deep app-prime-table .p-paginator .p-paginator-element.p-highlight {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+}
+
+/* Debug panel (remove in production) */
+.debug-panel {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 10px;
+  border-radius: 4px;
+  z-index: 1000;
+  display: none; /* Hidden by default */
+}
+
+.debug-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-top: 8px;
+}
+
+input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+}
+:host ::ng-deep input[type="checkbox"] {
+  pointer-events: auto !important;
+  position: relative;
+  z-index: 10;
+}
+
+:host ::ng-deep td {
+  pointer-events: auto;
+}
+
+/* Add these styles at the end of your existing CSS file */
+
+/* Selected count display - NEW */
+.selected-count {
+  background-color: #f0f9ff;
+  padding: 8px 16px;
+  border-radius: 6px;
+  border: 1px solid #e0f2fe;
+  font-size: 14px;
+  color: #0369a1;
+  margin-bottom: 16px;
+}
+
+.selection-hint {
+  font-size: 13px;
+  color: #6b7280;
+  font-style: italic;
+  margin-left: 8px;
+}
+
+/* Hide the old table-info section since checkbox is now in header */
+.table-info {
+  display: none;
+}
+
+/* Update status badge colors to match your theme */
+.status-badge {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.status-active {
+  background: #d1fae5;
+  color: #065f46;
+}
+
+.status-inactive {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+/* Additional styling for table header checkbox alignment */
+::ng-deep app-prime-table .simple-table thead th:first-child {
+  text-align: center !important;
+  padding: 12px 8px !important;
+}
+
+::ng-deep app-prime-table .simple-table tbody td:first-child {
+  text-align: center !important;
+  padding: 12px 8px !important;
+}
+
+/* Ensure checkbox column has proper width */
+::ng-deep app-prime-table .simple-table thead th:first-child,
+::ng-deep app-prime-table .simple-table tbody td:first-child {
+  width: 50px !important;
+  min-width: 50px !important;
+  max-width: 50px !important;
+}
+
+/* Style for checkboxes */
+::ng-deep app-prime-table .header-checkbox {
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+  accent-color: #9b51e0;
+  margin: 0 auto;
+  display: block;
+}
+
+::ng-deep
+  app-prime-table
+  .simple-table
+  tbody
+  td:first-child
+  input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+  accent-color: #9b51e0;
+  margin: 0 auto;
+  display: block;
+}
+
+::ng-deep
+  app-prime-table
+  .simple-table
+  tbody
+  td:first-child
+  input[type="checkbox"]:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Remove sort icon from checkbox column */
+::ng-deep app-prime-table .simple-table thead th:first-child .sort-icon {
+  display: none !important;
+}
+
+/* Prevent hover effect on checkbox column header */
+::ng-deep app-prime-table .simple-table thead th:first-child.sortable:hover {
+  background: #f9fafb !important;
+}
+
+::ng-deep app-prime-table .simple-table thead th:first-child.sortable {
+  cursor: default !important;
+}

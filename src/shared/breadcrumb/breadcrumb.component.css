@@ -1,0 +1,48 @@
+.breadcrumb {
+  background: transparent;
+  font-size: 12.5px;
+  padding: 0;
+}
+.breadcrumb-title {
+  font-weight: 600;
+  color: var(--secondary-bg);
+}
+.breadcrumb-item {
+  color: var(--text-muted);
+}
+
+.breadcrumb-item a {
+  text-decoration: none;
+  text-decoration-line: none;
+  color: var(--breadcrumb-link);
+  transition: color 0.2s;
+}
+
+.breadcrumb-item a:hover {
+  color: var(--secondary-bg);
+  text-decoration: none;
+}
+
+.breadcrumb-item + .breadcrumb-item::before {
+  content: "/";
+  color: var(--text-muted);
+  padding: 0 0.1rem;
+}
+
+.breadcrumb-item.active {
+  color: var(--secondary-bg);
+  font-weight: 500;
+}
+.breadcrumb-title h4 {
+  font-weight: 600;
+  font-size: 14.9px;
+}
+.breadcrumb-item + .breadcrumb-item {
+  padding-left: 0;
+}
+
+.breadcrumb-item + .breadcrumb-item::before {
+  padding: 0;
+  margin: 0 3px; /* optional: minimal space */
+  content: "/";
+}

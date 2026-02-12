@@ -1,0 +1,56 @@
+<div class="transfer-container mt-4">
+  <div class="card">
+    <div class="card-body">
+      <!-- Header Section with Search Only -->
+      <div class="transfer-header">
+        <div class="search-section">
+          <div class="search-wrapper">
+            <app-icon [icon]="'search'" class="search-icon"></app-icon>
+            <input
+              type="text"
+              class="search-input"
+              placeholder="Search by student name, ID, grade..."
+              [(ngModel)]="searchQuery"
+            />
+          </div>
+        </div>
+      </div>
+
+      <!-- Table -->
+      <app-prime-table
+        [data]="filteredTransfers"
+        [columns]="columns"
+        [actions]="actions"
+        [rows]="5"
+        [rowsPerPageOptions]="[5, 10, 25]"
+        [paginator]="true"
+        [striped]="true"
+        [globalFilterFields]="[
+          'studentName',
+          'studentId',
+          'fromGrade',
+          'toGrade'
+        ]"
+      >
+        <!-- Custom Body Template for Status Column -->
+        <ng-template #bodyTemplate let-rowData let-field="field">
+          <ng-container [ngSwitch]="field">
+            <ng-container *ngSwitchCase="'status'">
+              <span
+                class="status-badge"
+                [class.status-completed]="rowData.status === 'Completed'"
+                [class.status-pending]="rowData.status === 'Pending'"
+                [class.status-cancelled]="rowData.status === 'Cancelled'"
+              >
+                {{ rowData.status }}
+              </span>
+            </ng-container>
+            <ng-container *ngSwitchDefault>
+              {{ rowData[field] }}
+            </ng-container>
+          </ng-container>
+        </ng-template>
+      </app-prime-table>
+    </div>
+  </div>
+</div>

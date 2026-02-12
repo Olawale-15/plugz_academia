@@ -1,0 +1,130 @@
+<div class="assessment-type-container mt-4">
+  <div class="card">
+    <div class="card-body">
+      <!-- Header Section with Search and New Button -->
+      <div class="assessment-header">
+        <div class="search-section">
+          <div class="search-container">
+            <select class="search-filter" [(ngModel)]="searchFilter">
+              <option
+                *ngFor="let filter of searchFilters"
+                [value]="filter.value"
+              >
+                {{ filter.label }}
+              </option>
+            </select>
+            <div class="search-input-wrapper">
+              <app-icon [icon]="'search'" class="search-icon"></app-icon>
+              <input
+                type="text"
+                class="search-input"
+                placeholder="Search assessment types..."
+                [(ngModel)]="searchQuery"
+                (keyup.enter)="onSearch()"
+              />
+            </div>
+            <button
+              class="btn-search"
+              (click)="onSearch()"
+              [disabled]="loadingAssessments"
+            >
+              {{ loadingAssessments ? "Searching..." : "Search" }}
+            </button>
+          </div>
+        </div>
+        <button class="btn-new" (click)="onNewAssessmentType()">
+          <app-icon [icon]="'plus'" class="btn-icon"></app-icon>
+          New Assessment Type
+        </button>
+      </div>
+
+      <!-- PrimeNG Table -->
+      <app-prime-table
+        [data]="filteredAssessmentTypes"
+        [columns]="columns"
+        [actions]="actions"
+        [rows]="10"
+        [rowsPerPageOptions]="[10, 25, 50]"
+        [paginator]="true"
+        [striped]="true"
+        [loading]="loadingAssessments"
+        [globalFilterFields]="['assessmentId', 'assessmentName']"
+      >
+      </app-prime-table>
+    </div>
+  </div>
+</div>
+
+<!-- Create/Update Assessment Type Modal -->
+<app-modal
+  [isOpen]="isModalOpen"
+  [title]="isEditMode ? 'Update Assessment Type' : 'Create New Assessment Type'"
+  [size]="'lg'"
+  (onClose)="closeModal()"
+>
+  <form [formGroup]="assessmentForm" class="assessment-form">
+    <div class="row">
+      <!-- Assessment ID -->
+      <div class="form-group col-12 col-md-6">
+        <label for="assessmentId"
+          >Assessment ID <span class="required">*</span></label
+        >
+        <input
+          type="text"
+          id="assessmentId"
+          class="form-control"
+          formControlName="assessmentId"
+          [class.invalid]="isFieldInvalid('assessmentId')"
+        />
+        <span class="error-message" *ngIf="isFieldInvalid('assessmentId')">
+          Assessment ID is required
+        </span>
+      </div>
+      <!-- Weight Percentage -->
+      <div class="form-group col-12 col-md-6">
+        <label for="weightPercentage"
+          >Weight Percentage <span class="required">*</span></label
+        >
+        <input
+          type="number"
+          id="weightPercentage"
+          class="form-control"
+          formControlName="weightPercentage"
+          [class.invalid]="isFieldInvalid('weightPercentage')"
+          min="0"
+          max="100"
+        />
+        <span class="error-message" *ngIf="isFieldInvalid('weightPercentage')">
+          Weight Percentage is required (0-100)
+        </span>
+      </div>
+      <!-- Assessment Name -->
+      <div class="form-group col-12">
+        <label for="assessmentName"
+          >Assessment Name <span class="required">*</span></label
+        >
+        <input
+          type="text"
+          id="assessmentName"
+          class="form-control"
+          formControlName="assessmentName"
+          [class.invalid]="isFieldInvalid('assessmentName')"
+        />
+        <span class="error-message" *ngIf="isFieldInvalid('assessmentName')">
+          Assessment Name is required
+        </span>
+      </div>
+    </div>
+  </form>
+
+  <!-- Modal Footer -->
+  <div modal-footer>
+    <button class="btn-cancel" (click)="closeModal()" [disabled]="isLoading">
+      Cancel
+    </button>
+    <button class="btn-submit" (click)="handleSubmit()" [disabled]="isLoading">
+      <app-icon *ngIf="isLoading" [icon]="'loader'" class="spinner"></app-icon>
+      {{ isEditMode ? "Update Assessment Type" : "Create Assessment Type" }}
+    </button>
+  </div>
+</app-modal>

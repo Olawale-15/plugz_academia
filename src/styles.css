@@ -1,0 +1,568 @@
+body {
+  background-color: var(--primary-bg);
+  scroll-behavior: smooth;
+  font-size: 14px;
+  --input-height: 42px;
+  --input-radius: 6px;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: transparent;
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #9b51e0;
+}
+
+/* For Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: transparent transparent;
+}
+
+:root {
+  --sidebar-width: 224px;
+  --sidebar-collapsed-width: 60px;
+  --sidebar-current-width: var(--sidebar-width);
+  --app-sidebar-z: 900; /* base sidebar and other UI */
+  --submenu-z: 1200; /* sidebar flyouts */
+  --modal-backdrop-z: 13000; /* very large to be safe */
+  --modal-z: 13100;
+  --sidebar-header-height: 70px; /* adjust if header height changes */
+  --sidebar-footer-height: 64px; /* adjust to match your footer area */
+
+  --primary-bg: #fafafa;
+  --primary-bg1: #ffffff; /* Light background */
+  --sidebar-bg: #ffffff;
+  --secondary-bg: #22252f; /* Sligqhtly lighter for contrast */
+  --primary-text: #000;
+  --sidemenu-active: #f3f8fb;
+  --header-bg: #ffffff;
+  --filter-text: #3b5bdb;
+  --sidemenu-active-text: #9878c5;
+  --secondary-text: #ffff;
+  --sidebar-text: #65686e;
+  --sidebar-sub-item-color: #7b8198;
+  --filter-bg: #e5e7eb;
+  --btn-text: #fff; /* General button text color */
+  --btn-bgcolor: #47549b; /* Button background */
+  --iconcolor: #0a192f;
+  --textlinkcolor: #0a192f;
+  --secondary-color: #f5f7fb;
+  --text-muted: #4d5257;
+  --text-dark: #495057; /* for labels */
+  --border-color: #c5c5c5; /* for input field border color */
+  --bottomline-color: #c5c5c5;
+  --cardbg: #fff;
+  --cardbodycolor: #000;
+  --cardborder: #f6f6f6;
+  --inputbg: #fff; /* all input field bg color */
+  --inputcolor: #343747;
+  --disabledform: #e9ecef;
+  --disabledform-text: #ffff;
+
+  --custom-table-bg: #fff;
+  --custom-table-text: #212529;
+  --custom-table-border: #f6f6f6;
+  --custom-table-header-bg: #f8f9fa;
+  --custom-table-striped-bg: #f8fafa;
+  --custom-table-muted: #6c757d;
+  /* custom card left side */
+  --glass-bg: rgba(255, 255, 255, 0.6);
+  /*   --glass-border: rgba(255, 255, 255, 0.3);
+ */
+  --glass-border: rgb(223, 222, 222);
+  --menu-activecolor: #204178;
+  --menu-boderleft: #204178;
+  --menu-color: #0a0a0a;
+
+  --menu-hover-bg: rgba(0, 0, 0, 0.05);
+  --menu-active-bg: rgba(0, 0, 0, 0.07);
+
+  --footer-bg: #3f3e3e;
+  --footer-text: #ffff;
+  --footer-accent: #4a6fa5;
+  --footer-hover: #4fc3f7;
+
+  --modal-bg: #fff;
+  --modal-text: #222;
+  --modal-border: #e0e0e0;
+}
+
+html[data-theme="darkMode"] {
+  /*  --primary-bg: #22252f; */ /* Dark background */
+  --primary-bg1: #22252f;
+  --sidebar-bg: #2b2e3b;
+  --header-bg: #2d313e;
+
+  --sidemenu-active: #4c4d4e;
+  --sidemenu-active-text: #ffff;
+  --sidebar-text: #898fa9;
+  --sidebar-sub-item-color: #7b8198;
+  /* --secondary-bg: #f5f7fb; */
+  --primary-text: #fff;
+  --textlinkcolor: #adb5bd;
+  --filter-bg: #4f4f50;
+  --filter-text: #f5f7fb;
+  /*
+  --cardbg: #2b2e3b;
+  --cardbodycolor: #adb5bd;
+  --cardborder: #343747;
+ */
+  --iconcolor: #fff;
+  --text-muted: #b3afaf;
+
+  --text-dark: #adb5bd;
+  --inputbg: #313443;
+  --inputcolor: #adb5bd;
+  --border-color: #414040;
+
+  --custom-table-bg: #232a36;
+  --custom-table-text: #e3e6ed;
+  --custom-table-border: #343747;
+  --custom-table-header-bg: #2d3142;
+  --custom-table-striped-bg: #292d3e;
+  --custom-table-muted: #8a94a7;
+  --disabledform: #4f4f4f;
+  --disabledform-text: #000;
+  /* custom card left side */
+  --glass-bg: rgba(255, 255, 255, 0.05);
+  --glass-border: rgba(255, 255, 255, 0.1);
+  --menu-hover-bg: rgba(255, 255, 255, 0.08);
+  --menu-activecolor: #fff;
+  --menu-hover-color: #6c757d;
+  --menu-color: #adb5bd;
+  --menu-boderleft: #c0bcbc;
+  --menu-active-bg: rgba(255, 255, 255, 0.12);
+  --footer-bg: #1a1a2e;
+  --footer-text: #e6e6e6;
+  --footer-accent: #4a6fa5;
+  --footer-hover: #4fc3f7;
+
+  --modal-bg: #232a36;
+  --modal-text: #e3e6ed;
+  --modal-border: #343747;
+}
+
+h5 {
+  color: var(--primary-text);
+}
+.account-pages {
+  width: 100%;
+  margin: 0 auto;
+}
+.form-label {
+  font-weight: 500;
+  font-size: 0.9rem;
+  color: var(--text-dark);
+  margin-bottom: 6px;
+}
+
+.form-control,
+.form-select {
+  border: 1px solid var(--border-color);
+  background-color: var(--inputbg);
+  color: var(--inputcolor);
+  border-radius: 0;
+  font-size: 15px;
+}
+
+.form-control:focus,
+.form-select:focus {
+  background-color: var(--inputbg);
+  color: var(--inputcolor);
+  box-shadow: 0 0 0 0.1px var(--secondary-bg);
+}
+.form-control:disabled,
+.form-select:disabled {
+  background-color: var(--disabledform);
+  opacity: 1;
+}
+.form-check {
+  margin-top: 16px;
+  margin-bottom: 24px;
+}
+
+.form-check-input {
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  cursor: pointer;
+  background-color: var(--inputbg);
+  transition:
+    background-color 0.3s ease,
+    border-color 0.3s ease;
+}
+
+.form-check-input:checked {
+  background-color: var(--btn-bgcolor);
+  border-color: var(--btn-bgcolor);
+}
+
+.form-check-label {
+  font-size: 14px;
+  color: var(--text-dark);
+  cursor: pointer;
+  margin-left: 6px;
+}
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+textarea:-webkit-autofill,
+textarea:-webkit-autofill:hover,
+textarea:-webkit-autofill:focus,
+select:-webkit-autofill {
+  -webkit-box-shadow: 0 0 0px 1000px var(--inputbg) inset !important;
+  -webkit-text-fill-color: var(--inputcolor) !important;
+  transition: background-color 5000s ease-in-out 0s;
+}
+
+.card {
+  border: none;
+  background-color: var(--cardbg);
+  border-radius: 2px;
+  color: var(--cardbodycolor);
+  overflow: inherit;
+  border: 1px solid var(--cardborder);
+}
+
+.card-body {
+  color: var(--cardbodycolor);
+  padding: 32px;
+}
+.card-footer {
+  border: none;
+  background-color: var(--cardbg);
+  border-radius: 0;
+  overflow: hidden;
+  padding: 0;
+  margin: 0;
+}
+
+/* YES button: green text, transparent background, green border */
+.swal2-btn-yes {
+  color: #28a745 !important; /* green text */
+  background-color: transparent !important;
+  border: 1px solid var(--primary-bg) !important; /* green border */
+  border-radius: 0;
+  padding: 0.5em 1em;
+  margin-right: 1rem;
+}
+
+/* NO button: red text, transparent background, red border */
+.swal2-btn-no {
+  color: #dc3545 !important; /* red text */
+  background-color: transparent !important;
+  border: 1px solid var(--primary-bg) !important; /* green border */
+  border-radius: 0;
+  padding: 0.5em 1em;
+}
+
+/* OK button (for success/error/info): white text, transparent background, white border */
+.swal2-btn-ok {
+  color: #000 !important; /* white text */
+  background-color: transparent !important;
+  border: 1px solid #cdcdcd !important; /* green border */
+  border-radius: 0;
+  padding: 0.5em 1em;
+}
+
+/* On hover, you might want slight background tint: */
+.swal2-btn-yes:hover {
+  background-color: rgba(
+    40,
+    167,
+    69,
+    0.1
+  ) !important; /* light green background on hover */
+}
+.swal2-btn-no:hover {
+  background-color: rgba(220, 53, 69, 0.1) !important; /* light red */
+}
+.swal2-btn-ok:hover {
+  background-color: rgba(255, 255, 255, 0.1) !important; /* light white tint */
+}
+
+/* If SweetAlert2 applies padding or font-size you want to override: */
+.swal2-popup .swal2-styled.swal2-btn-yes,
+.swal2-popup .swal2-styled.swal2-btn-no,
+.swal2-popup .swal2-styled.swal2-btn-ok {
+  font-size: 1rem;
+}
+
+.modal-content {
+  background-color: var(--modal-bg);
+  color: var(--modal-text);
+  border: 1px solid var(--modal-border);
+  border-radius: 8px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+}
+.modal-backdrop {
+  position: fixed !important;
+  inset: 0 !important; /* top:0; right:0; bottom:0; left:0; */
+  width: 100vw !important;
+  height: 100vh !important;
+  z-index: var(--modal-backdrop-z) !important;
+  background-color: rgba(0, 0, 0, 0.45) !important; /* adjust dim */
+}
+/* Modal itself must be above the backdrop */
+.modal {
+  z-index: var(--modal-z) !important;
+  position: fixed !important; /* ensure fixed stacking above everything */
+}
+.swal2-container,
+.swal2-popup {
+  z-index: calc(var(--modal-z) + 100) !important;
+}
+.modal-header,
+.modal-footer {
+  background: transparent;
+  color: var(--modal-text);
+  border-bottom: 1px solid var(--modal-border);
+}
+.modal-content {
+  border-radius: 0;
+}
+.ng-select .ng-select-container {
+  border-radius: 0 !important;
+}
+
+/* General pagination wrapper */
+.pagination-wrapper ngb-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 4px; /* space between buttons */
+}
+
+/* Individual page links */
+.page-item .page-link {
+  color: var(--custom-table-text); /* default text */
+  background-color: var(--cardbg); /* default bg */
+  border: none; /* subtle border */
+  border-radius: 50px;
+  margin-right: 4px;
+  padding: 4px 8px; /* smaller size */
+  min-width: 32px;
+  text-align: center;
+  transition: all 0.2s;
+}
+
+/* Hover effect */
+.page-item .page-link:hover {
+  background-color: var(--sidemenu-active); /* highlight bg on hover */
+  color: var(--sidemenu-active-text); /* highlight text */
+  border-color: var(--sidemenu-active); /* match hover */
+}
+
+/* Active page number */
+.page-item.active .page-link {
+  background-color: #5b73e8; /* active bg */
+  color: var(--secondary-text); /* active text */
+  border-color: var(--sidemenu-active);
+  font-weight: 500;
+}
+
+/* Disabled navigation (prev/next) */
+.page-item.disabled .page-link {
+  opacity: 0.5;
+  cursor: not-allowed;
+  border-color: var(--custom-table-border);
+}
+
+/* Reduce gap for first/last buttons if needed */
+.page-item:first-child .page-link,
+.page-item:last-child .page-link {
+  border-radius: 4px;
+}
+.page-item .page-link:focus {
+  outline: none; /* removes blue focus ring */
+  box-shadow: none; /* removes shadow that some browsers add */
+}
+/* Default (Light mode) */
+.ng-select .ng-select-container {
+  background-color: var(--inputbg) !important;
+  color: var(--inputcolor) !important;
+  border: 1px solid var(--border-color) !important;
+}
+
+.ng-select .ng-value,
+.ng-select .ng-placeholder {
+  color: var(--inputcolor) !important;
+}
+
+.ng-select.ng-select-opened > .ng-select-container {
+  background-color: var(--inputbg) !important;
+}
+
+/* Dropdown panel */
+.ng-dropdown-panel {
+  background-color: var(--cardbg) !important;
+  color: var(--cardbodycolor) !important;
+  border: 1px solid var(--cardborder) !important;
+}
+
+/* Highlighted option */
+.ng-option.ng-option-marked {
+  background-color: var(--sidemenu-active) !important;
+  color: var(--sidemenu-active-text) !important;
+}
+
+/* Selected option */
+.ng-option-selected {
+  background-color: var(--menu-active-bg) !important;
+  color: var(--menu-color) !important;
+}
+
+/* Dark Mode */
+html[data-theme="darkMode"] .ng-select .ng-select-container {
+  color: var(--inputcolor) !important;
+  --disabledform-border: #dee2e6;
+  border: 1px solid var(--border-color) !important;
+}
+
+html[data-theme="darkMode"] .ng-dropdown-panel {
+  color: var(--cardbodycolor) !important;
+  border: 1px solid var(--cardborder) !important;
+  --disabledform-border: #4f4f4f;
+}
+/* Dark Mode input text + cursor color fix for ng-select */
+html[data-theme="darkMode"] .ng-select .ng-select-container input,
+html[data-theme="darkMode"] .ng-select .ng-select-container .ng-input input {
+  color: var(--inputcolor) !important;
+  caret-color: var(--inputcolor) !important; /* Cursor color */
+}
+/* ...existing code... */
+
+/* Style for disabled ng-select */
+/* Style for disabled ng-select */
+.ng-select.ng-select-disabled .ng-select-container {
+  background-color: var(--disabledform) !important;
+  color: var(--disabledform-text) !important;
+  cursor: not-allowed;
+  opacity: 1;
+}
+
+.ng-select.ng-select-disabled .ng-arrow-wrapper {
+  opacity: 0.5;
+}
+/* ...existing code... */
+
+/* ng-select custom styling */
+::ng-deep .custom-ng-select {
+  width: 100%;
+}
+
+::ng-deep .custom-ng-select .ng-select-container {
+  height: var(--input-height);
+  min-height: var(--input-height);
+  border-radius: var(--input-radius) !important;
+  background-color: #ffffff;
+  padding: 0 12px;
+  display: flex;
+  align-items: center;
+  font-size: 0.875rem;
+}
+
+::ng-deep .custom-ng-select .ng-select-container:hover {
+  border-color: #d1d5db;
+}
+
+::ng-deep .custom-ng-select.ng-select-focused .ng-select-container {
+  outline: none;
+  border-color: #9b51e0;
+  box-shadow: 0 0 0 3px rgba(155, 81, 224, 0.1);
+}
+
+::ng-deep .custom-ng-select .ng-value-container {
+  padding: 0;
+  display: flex;
+  align-items: center;
+  height: 100%;
+}
+
+::ng-deep .custom-ng-select .ng-value-container .ng-input {
+  padding: 0;
+  top: 0;
+}
+
+::ng-deep .custom-ng-select .ng-value-container .ng-input > input {
+  padding: 0;
+  font-size: 0.875rem;
+  color: #374151;
+}
+
+::ng-deep .custom-ng-select .ng-value {
+  font-size: 0.875rem;
+  color: #374151;
+}
+
+::ng-deep .custom-ng-select .ng-placeholder {
+  color: #9ca3af;
+  font-size: 0.875rem;
+  line-height: 1;
+}
+
+::ng-deep .custom-ng-select .ng-clear-wrapper {
+  color: #6b7280;
+}
+
+::ng-deep .custom-ng-select .ng-arrow-wrapper {
+  padding: 0;
+}
+
+::ng-deep .custom-ng-select .ng-arrow-wrapper .ng-arrow {
+  border-color: #6b7280 transparent transparent;
+  border-style: solid;
+  border-width: 5px 5px 2.5px;
+}
+
+::ng-deep .custom-ng-select .ng-dropdown-panel {
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  box-shadow:
+    0 4px 6px -1px rgba(0, 0, 0, 0.1),
+    0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  margin-top: 4px;
+}
+
+::ng-deep .custom-ng-select .ng-dropdown-panel-items .ng-option {
+  padding: 0.625rem 0.75rem;
+  font-size: 0.875rem;
+  transition: background-color 0.15s;
+}
+
+::ng-deep .custom-ng-select .ng-dropdown-panel-items .ng-option:hover {
+  background-color: #f3f4f6;
+}
+
+::ng-deep
+  .custom-ng-select
+  .ng-dropdown-panel-items
+  .ng-option.ng-option-selected {
+  background-color: #ede9fe;
+  color: #7c3aed;
+}
+
+::ng-deep
+  .custom-ng-select
+  .ng-dropdown-panel-items
+  .ng-option.ng-option-marked {
+  background-color: red;
+}
+::ng-deep .custom-ng-select .ng-value-container,
+::ng-deep .custom-ng-select .ng-input,
+::ng-deep .custom-ng-select .ng-input > input {
+  border-radius: 0 !important;
+}

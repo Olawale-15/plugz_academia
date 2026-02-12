@@ -1,0 +1,51 @@
+<div class="container-fluid breadcrumb-container">
+  <div
+    class="row align-items-start align-items-md-center flex-column flex-md-row"
+  >
+    <!-- Title + Icon -->
+    <div
+      class="col-12 col-md-auto breadcrumb-title d-flex align-items-center mb-2 mb-md-0"
+    >
+      <!--       <app-icon [icon]="breadcrumbs.icon" class="me-2"></app-icon>
+ -->
+      <h4 class="title text-truncate mb-0 d-inline-block">
+        {{ breadcrumbs?.childBreadcrumb | titlecase }}
+      </h4>
+    </div>
+
+    <!-- Right side Breadcrumb trail -->
+    <div class="col breadcrumb-nav text-start text-md-end">
+      <ol
+        class="breadcrumb d-flex flex-wrap justify-content-start justify-content-md-end mb-0"
+      >
+        <li
+          *ngIf="
+            breadcrumbs.parentBreadcrumb &&
+            breadcrumbs.parentBreadcrumb.toLowerCase() !== 'dashboard'
+          "
+          class="breadcrumb-item"
+        >
+          <a [routerLink]="['/dashboard']">Dashboard</a>
+        </li>
+        <li
+          *ngIf="
+            breadcrumbs.parentBreadcrumb &&
+            breadcrumbs.parentBreadcrumb.toLowerCase() !== 'dashboard'
+          "
+          class="breadcrumb-item"
+        >
+          <a href="javascript:void(0)">
+            {{ breadcrumbs.parentBreadcrumb | titlecase }}
+          </a>
+        </li>
+        <li
+          *ngIf="showChildBreadcrumb"
+          class="breadcrumb-item active"
+          aria-current="page"
+        >
+          {{ breadcrumbs.childBreadcrumb | titlecase }}
+        </li>
+      </ol>
+    </div>
+  </div>
+</div>

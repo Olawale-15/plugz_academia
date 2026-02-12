@@ -1,0 +1,337 @@
+<div class="promotion-container mt-4">
+  <div class="card">
+    <div class="card-body">
+      <!-- Header Section with Search and New Button -->
+      <div class="promotion-header">
+        <!-- Unified Search Section -->
+        <div class="search-section">
+          <div class="search-container">
+            <!-- Search by filter -->
+            <select class="search-filter" [(ngModel)]="searchFilter">
+              <option
+                *ngFor="let filter of searchFilters"
+                [value]="filter.value"
+              >
+                {{ filter.label }}
+              </option>
+            </select>
+
+            <!-- Search text -->
+            <div class="search-input-wrapper">
+              <app-icon [icon]="'search'" class="search-icon"></app-icon>
+              <input
+                type="text"
+                class="search-input"
+                placeholder="Search enrollments..."
+                [(ngModel)]="searchQuery"
+                (keyup.enter)="onSearch()"
+              />
+            </div>
+            <!-- Class dropdown -->
+            <select class="search-filter" [(ngModel)]="searchClasses">
+              <option [ngValue]="null" disabled>Search By Class</option>
+              <option *ngFor="let c of classes" [ngValue]="c.referenceId">
+                {{ c.referenceName }}
+              </option>
+            </select>
+            <!-- Session dropdown -->
+            <select class="search-filter" [(ngModel)]="searchSession">
+              <option [ngValue]="null" disabled>Search By Session</option>
+              <option
+                *ngFor="let s of academicSessions"
+                [ngValue]="s.referenceId"
+              >
+                {{ s.referenceName }}
+              </option>
+            </select>
+
+            <!-- Term dropdown -->
+            <select class="search-filter" [(ngModel)]="searchTerm">
+              <option [ngValue]="null" disabled>Search By Term</option>
+              <option *ngFor="let t of academicTerms" [ngValue]="t.referenceId">
+                {{ t.referenceName }}
+              </option>
+            </select>
+
+            <!-- Search button -->
+            <button
+              class="btn-search"
+              (click)="onSearch()"
+              [disabled]="loadingEnrollments"
+            >
+              {{ loadingEnrollments ? "Searching..." : "Search" }}
+            </button>
+          </div>
+        </div>
+
+        <!-- New Student -->
+        <button class="btn-new" (click)="onNewEnrollment()">
+          <app-icon [icon]="'plus'" class="btn-icon"></app-icon>
+          New Enrollment
+        </button>
+      </div>
+
+      <!-- Selected count display (replaces the table-info section) -->
+      <div class="selected-count mb-3">
+        <strong>Selected: {{ SelectedCount }}</strong>
+        <span class="selection-hint">
+          (Selecting only unenrolled students)
+        </span>
+      </div>
+
+      <!-- PrimeNG Table -->
+      <app-prime-table
+        [data]="filteredEnrollments"
+        [columns]="columns"
+        [actions]="actions"
+        [rows]="10"
+        [rowsPerPageOptions]="[10, 25, 50]"
+        [paginator]="true"
+        [striped]="true"
+        [loading]="loadingEnrollments"
+        [globalFilterFields]="['studentName', 'studentId', 'enrollmentId']"
+      >
+        <!-- HEADER TEMPLATE -->
+        <ng-template #headerTemplate let-field="field">
+          <ng-container *ngIf="field === 'select'">
+            <input
+              type="checkbox"
+              [checked]="areAllSelected()"
+              (click)="$event.stopPropagation()"
+              (change)="toggleSelectAll($event)"
+            />
+          </ng-container>
+        </ng-template>
+
+        <!-- BODY TEMPLATE -->
+        <ng-template #bodyTemplate let-rowData let-field="field">
+          <ng-container [ngSwitch]="field">
+            <!-- ROW CHECKBOX -->
+            <ng-container *ngSwitchCase="'select'">
+              <input
+                type="checkbox"
+                [(ngModel)]="rowData.selected"
+                [disabled]="isStudentEnrolled(rowData)"
+                (click)="$event.stopPropagation()"
+                (change)="syncSelectedStudents()"
+              />
+            </ng-container>
+
+            <!-- STATUS -->
+            <ng-container *ngSwitchCase="'status'">
+              <span
+                class="status-badge"
+                [class.status-active]="rowData.status === 'ENABLED'"
+                [class.status-inactive]="rowData.status === 'DISABLED'"
+              >
+                {{ rowData.status }}
+              </span>
+            </ng-container>
+
+            <!-- DEFAULT -->
+            <ng-container *ngSwitchDefault>
+              {{ rowData[field] }}
+            </ng-container>
+          </ng-container>
+        </ng-template>
+      </app-prime-table>
+    </div>
+  </div>
+</div>
+
+<!-- Create/Update Enrollment Modal -->
+<!-- Create Bulk Enrollment Modal -->
+<app-modal
+  [isOpen]="isModalOpen"
+  [title]="isEditMode ? 'Update Enrollment' : 'Create Bulk Enrollment'"
+  [size]="'lg'"
+  (onClose)="closeModal()"
+>
+  <form [formGroup]="enrollmentForm" class="enrollment-form">
+    <div class="form-grid">
+      <!-- Programme -->
+      <div class="form-group">
+        <label for="programmeId"
+          >Programme <span class="required">*</span></label
+        >
+        <select
+          id="programmeId"
+          class="form-control"
+          formControlName="programmeId"
+          [class.is-invalid]="isFieldInvalid('programmeId')"
+        >
+          <option value="" disabled selected>Select a programme</option>
+          <option
+            *ngFor="let programme of programmes"
+            [value]="programme.referenceId"
+          >
+            {{ programme.referenceName }}
+          </option>
+        </select>
+        <span class="invalid-feedback" *ngIf="isFieldInvalid('programmeId')">
+          Programme is required
+        </span>
+      </div>
+
+      <!-- Academic Session -->
+      <div class="form-group">
+        <label for="academicSession"
+          >Academic Session <span class="required">*</span></label
+        >
+        <ng-select
+          id="academicSession"
+          formControlName="academicSession"
+          [items]="academicSessions"
+          bindLabel="referenceName"
+          bindValue="referenceId"
+          [clearable]="true"
+          [searchable]="true"
+          [class.is-invalid]="isFieldInvalid('academicSession')"
+        >
+        </ng-select>
+        <span
+          class="invalid-feedback"
+          *ngIf="isFieldInvalid('academicSession')"
+        >
+          Academic Session is required
+        </span>
+      </div>
+
+      <!-- Academic Term -->
+      <div class="form-group">
+        <label for="academicTerm"
+          >Academic Term <span class="required">*</span></label
+        >
+        <ng-select
+          id="academicTerm"
+          formControlName="academicTerm"
+          [items]="academicTerms"
+          bindLabel="referenceName"
+          bindValue="referenceId"
+          [clearable]="true"
+          [searchable]="true"
+          [class.is-invalid]="isFieldInvalid('academicTerm')"
+        >
+        </ng-select>
+        <span class="invalid-feedback" *ngIf="isFieldInvalid('academicTerm')">
+          Academic Term is required
+        </span>
+      </div>
+
+      <!-- Class -->
+      <div class="form-group">
+        <label for="classId">Class <span class="required">*</span></label>
+        <ng-select
+          id="classId"
+          formControlName="classId"
+          [items]="classes"
+          bindLabel="referenceName"
+          bindValue="referenceId"
+          placeholder="Select class"
+          [clearable]="true"
+          [searchable]="true"
+          [loading]="loadingLookups"
+          [class.is-invalid]="isFieldInvalid('classId')"
+        >
+        </ng-select>
+        <span class="invalid-feedback" *ngIf="isFieldInvalid('classId')">
+          Class is required
+        </span>
+      </div>
+
+      <!-- Sub Class (optional) -->
+      <div class="form-group">
+        <label for="subClassId">Sub Class</label>
+        <input
+          type="text"
+          id="subClassId"
+          class="form-control"
+          formControlName="subClassId"
+        />
+      </div>
+
+      <!-- Enrollment Date -->
+      <div class="form-group">
+        <label for="enrollmentDate"
+          >Enrollment Date <span class="required">*</span></label
+        >
+        <input
+          type="date"
+          id="enrollmentDate"
+          class="form-control"
+          formControlName="enrollmentDate"
+          [class.is-invalid]="isFieldInvalid('enrollmentDate')"
+        />
+        <span class="invalid-feedback" *ngIf="isFieldInvalid('enrollmentDate')">
+          Enrollment Date is required
+        </span>
+      </div>
+    </div>
+  </form>
+
+  <!-- Modal Footer -->
+  <div modal-footer>
+    <button
+      class="btn btn-secondary"
+      (click)="closeModal()"
+      [disabled]="isLoading"
+      type="button"
+    >
+      Cancel
+    </button>
+    <button
+      class="btn btn-primary"
+      (click)="handleSubmit()"
+      [disabled]="isLoading"
+      type="button"
+    >
+      {{
+        isLoading
+          ? isEditMode
+            ? "Saving..."
+            : "Creating..."
+          : isEditMode
+            ? "Save"
+            : "Create Enrollment"
+      }}
+    </button>
+  </div>
+</app-modal>
+<!-- Update Enrollment Status Modal -->
+<app-modal
+  [isOpen]="isStatusModalOpen"
+  [title]="'Update Enrollment Status'"
+  [size]="'sm'"
+  (onClose)="closeStatusModal()"
+>
+  <div class="modal-body">
+    <p>
+      Are you sure you want to
+      <strong>
+        {{ selectedEnrollment?.status === "ENABLED" ? "disable" : "enable" }}
+      </strong>
+      enrollment for
+      <strong>{{ selectedEnrollment?.studentName }}</strong
+      >?
+    </p>
+  </div>
+
+  <div modal-footer>
+    <button
+      class="btn btn-secondary"
+      type="button"
+      (click)="closeStatusModal()"
+      [disabled]="isLoading"
+    >
+      Cancel
+    </button>
+    <button
+      class="btn btn-primary"
+      type="button"
+      (click)="toggleEnrollmentStatus()"
+      [disabled]="isLoading"
+    >
+      {{ isLoading ? "Updating..." : "Confirm" }}
+    </button>
+  </div>
+</app-modal>

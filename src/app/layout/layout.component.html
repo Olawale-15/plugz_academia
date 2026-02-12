@@ -1,0 +1,167 @@
+<!-- Apply theme class to the wrapper -->
+<div class="layout-wrapper" [class.darkMode]="themeService.getTheme() === 'darkMode'">
+  <!-- SIDEBAR -->
+  <app-sidebar
+    [sidebarOpen]="sidebarOpen"
+    (toggle)="toggleSidebar()"
+    [class.collapsed]="!sidebarOpen"
+    [class.mobile-open]="sidebarOpen && isMobileView()"
+    class="sidebar-panel"
+  ></app-sidebar>
+  <div
+    class="sidebar-backdrop"
+    *ngIf="sidebarOpen && isMobileView()"
+    (click)="toggleSidebar()"
+  ></div>
+
+  <!-- MAIN AREA -->
+  <div class="main-area" [class.sidebar-collapsed]="!sidebarOpen">
+    <!-- FIXED HEADER -->
+    <div class="layout-header" [class.sidebar-collapsed]="!sidebarOpen">
+      <div class="header-content">
+        <!-- Left Section: Hamburger + Search -->
+        <div class="header-left">
+          <button class="hamburger-btn" (click)="toggleSidebar()">
+            <app-icon [icon]="'menu'"></app-icon>
+          </button>
+
+          <div class="search-box d-none d-md-flex">
+            <app-icon [icon]="'search'" class="search-icon"></app-icon>
+            <input
+              type="text"
+              class="search-input"
+              placeholder="What do you want to find?"
+              [(ngModel)]="searchQuery"
+            />
+          </div>
+        </div>
+
+        <!-- Right Section: Icons + Profile -->
+        <div class="header-right">
+          <!-- Notification Button -->
+          <button class="header-icon-btn" title="Notifications">
+            <app-icon [icon]="'bell'"></app-icon>
+            <span class="notification-badge">3</span>
+          </button>
+
+          <!-- Messages Button -->
+          <button class="header-icon-btn d-none d-lg-flex" title="Messages">
+            <app-icon [icon]="'message-circle'"></app-icon>
+          </button>
+
+          <!-- Theme Toggle -->
+          <button
+            class="header-icon-btn d-none d-md-flex"
+            (click)="themeService.toggleTheme()"
+            title="Toggle Theme"
+          >
+            <app-icon
+              [icon]="themeService.getTheme() === 'darkMode' ? 'sun' : 'moon'"
+            ></app-icon>
+          </button>
+
+          <!-- App Switcher -->
+          <div
+            class="app-switcher d-none d-lg-flex"
+            ngbDropdown
+            placement="bottom-end"
+          >
+            <button
+              class="header-icon-btn"
+              ngbDropdownToggle
+              title="App Switcher"
+            >
+              <app-icon [icon]="'grid'"></app-icon>
+            </button>
+
+            <div class="dropdown-menu app-grid-dropdown" ngbDropdownMenu>
+              <div class="dropdown-header">Quick Access</div>
+              <div class="app-grid">
+                <a
+                  *ngFor="let app of merchantSubServices"
+                  class="app-item"
+                  [href]="app.webUrl + token"
+                  target="_blank"
+                  title="{{ app.serviceName }}"
+                >
+                  <div class="app-icon-wrapper">
+                    <app-icon icon="bar-chart-2"></app-icon>
+                  </div>
+                  <span class="app-name">{{
+                    app.serviceName?.split(" ")[0]
+                  }}</span>
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <!-- Profile Dropdown -->
+          <div class="profile-dropdown" ngbDropdown placement="bottom-end">
+            <button class="profile-btn" ngbDropdownToggle>
+              <img
+                [src]="merchantLogo || 'images/profile.png'"
+                alt="Profile"
+                class="profile-img"
+              />
+              <div class="profile-info d-none d-lg-block">
+                <span class="profile-name">{{ merchantName || "Admin" }}</span>
+              </div>
+            </button>
+
+            <div class="dropdown-menu profile-dropdown-menu" ngbDropdownMenu>
+              <div class="dropdown-header">
+                <div class="d-flex align-items-center">
+                  <img
+                    [src]="merchantLogo || 'images/profile.png'"
+                    alt="Profile"
+                    class="profile-img-lg"
+                  />
+                  <div class="ms-2">
+                    <div class="fw-semibold">{{ merchantName || "Admin" }}</div>
+                    <div class="text-muted small">Administrator</div>
+                  </div>
+                </div>
+              </div>
+              <div class="dropdown-divider"></div>
+              <a
+                class="dropdown-item"
+                (click)="viewProfile()"
+                style="cursor: pointer"
+              >
+                <app-icon [icon]="'user'" class="me-2"></app-icon>
+                My Profile
+              </a>
+              <a
+                class="dropdown-item"
+                (click)="settings()"
+                style="cursor: pointer"
+              >
+                <app-icon [icon]="'settings'" class="me-2"></app-icon>
+                Settings
+              </a>
+              <a
+                class="dropdown-item"
+                (click)="helpCenter()"
+                style="cursor: pointer"
+              >
+                <app-icon [icon]="'help-circle'" class="me-2"></app-icon>
+                Help Center
+              </a>
+              <div class="dropdown-divider"></div>
+              <a class="dropdown-item text-danger" href="#">
+                <app-icon [icon]="'log-out'" class="me-2"></app-icon>
+                Sign Out
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div class="main-content p-3 mx-sm-2 mx-md-6">
+      <app-breadcrumb></app-breadcrumb>
+      <router-outlet></router-outlet>
+    </div>
+  </div>
+</div>

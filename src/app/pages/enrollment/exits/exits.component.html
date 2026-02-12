@@ -1,0 +1,206 @@
+<div class="exits-container mt-4">
+  <div class="card">
+    <div class="card-body">
+      <!-- Header Section with Search and New Button -->
+      <div class="exits-header">
+        <div class="search-section">
+          <div class="search-container">
+            <select class="search-filter" [(ngModel)]="searchFilter">
+              <option
+                *ngFor="let filter of searchFilters"
+                [value]="filter.value"
+              >
+                {{ filter.label }}
+              </option>
+            </select>
+            <div class="search-input-wrapper">
+              <app-icon [icon]="'search'" class="search-icon"></app-icon>
+              <input
+                type="text"
+                class="search-input"
+                placeholder="Search exits..."
+                [(ngModel)]="searchQuery"
+                (keyup.enter)="onSearch()"
+              />
+            </div>
+            <button
+              class="btn-search"
+              (click)="onSearch()"
+              [disabled]="loadingExits"
+            >
+              {{ loadingExits ? "Searching..." : "Search" }}
+            </button>
+          </div>
+        </div>
+        <button class="btn-new" (click)="onNewExit()">
+          <app-icon [icon]="'plus'" class="btn-icon"></app-icon>
+          New Exit
+        </button>
+      </div>
+
+      <!-- PrimeNG Table -->
+      <app-prime-table
+        [data]="filteredExits"
+        [columns]="columns"
+        [actions]="actions"
+        [rows]="10"
+        [rowsPerPageOptions]="[10, 25, 50]"
+        [paginator]="true"
+        [striped]="true"
+        [loading]="loadingExits"
+        [globalFilterFields]="[
+          'exitId',
+          'studentName',
+          'studentId',
+          'exitReason'
+        ]"
+      >
+        <!-- Custom Body Template for Status Column -->
+        <ng-template #bodyTemplate let-rowData let-field="field">
+          <ng-container [ngSwitch]="field">
+            <ng-container *ngSwitchCase="'exitStatus'">
+              <span
+                class="status-badge"
+                [class.status-active]="rowData.exitStatus === 'ACTIVE'"
+                [class.status-inactive]="rowData.exitStatus === 'INACTIVE'"
+              >
+                {{ rowData.exitStatus }}
+              </span>
+            </ng-container>
+            <ng-container *ngSwitchDefault>
+              {{ rowData[field] }}
+            </ng-container>
+          </ng-container>
+        </ng-template>
+      </app-prime-table>
+    </div>
+  </div>
+</div>
+
+<!-- Create/Update Exit Modal -->
+<app-modal
+  [isOpen]="isModalOpen"
+  [title]="isEditMode ? 'Update Exit Record' : 'Create New Exit Record'"
+  [size]="'lg'"
+  (onClose)="closeModal()"
+>
+  <form [formGroup]="exitForm" class="exit-form">
+    <div class="form-grid">
+      <!-- Exit ID -->
+      <div class="form-group">
+        <label for="exitId">Exit ID <span class="required">*</span></label>
+        <input
+          type="text"
+          id="exitId"
+          class="form-control"
+          formControlName="exitId"
+          [class.invalid]="isFieldInvalid('exitId')"
+          placeholder="Enter exit ID"
+        />
+        <span class="error-message" *ngIf="isFieldInvalid('exitId')">
+          Exit ID is required
+        </span>
+      </div>
+
+      <!-- Student ID -->
+      <div class="form-group">
+        <label for="studentId"
+          >Student ID <span class="required">*</span></label
+        >
+        <input
+          type="text"
+          id="studentId"
+          class="form-control"
+          formControlName="studentId"
+          [class.invalid]="isFieldInvalid('studentId')"
+          placeholder="Enter student ID"
+        />
+        <span class="error-message" *ngIf="isFieldInvalid('studentId')">
+          Student ID is required
+        </span>
+      </div>
+
+      <!-- Exit Reason -->
+      <div class="form-group">
+        <label for="exitReason"
+          >Exit Reason <span class="required">*</span></label
+        >
+        <ng-select
+          id="exitReason"
+          class="custom-ng-select"
+          formControlName="exitReason"
+          [items]="exitReasons"
+          bindLabel="referenceName"
+          bindValue="referenceId"
+          placeholder="Select exit reason"
+          [clearable]="true"
+          [searchable]="true"
+          [class.invalid]="isFieldInvalid('exitReason')"
+        >
+        </ng-select>
+        <span class="error-message" *ngIf="isFieldInvalid('exitReason')">
+          Exit Reason is required
+        </span>
+      </div>
+
+      <!-- Exit Date -->
+      <div class="form-group">
+        <label for="exitDate">Exit Date <span class="required">*</span></label>
+        <input
+          type="date"
+          id="exitDate"
+          class="form-control"
+          formControlName="exitDate"
+          [class.invalid]="isFieldInvalid('exitDate')"
+        />
+        <span class="error-message" *ngIf="isFieldInvalid('exitDate')">
+          Exit Date is required
+        </span>
+      </div>
+
+      <!-- Exit Status -->
+      <div class="form-group">
+        <label for="exitStatus">Status <span class="required">*</span></label>
+        <ng-select
+          id="exitStatus"
+          class="custom-ng-select"
+          formControlName="exitStatus"
+          [items]="exitStatuses"
+          bindLabel="referenceName"
+          bindValue="referenceId"
+          placeholder="Select status"
+          [clearable]="true"
+          [searchable]="true"
+          [class.invalid]="isFieldInvalid('exitStatus')"
+        >
+        </ng-select>
+        <span class="error-message" *ngIf="isFieldInvalid('exitStatus')">
+          Status is required
+        </span>
+      </div>
+
+      <!-- Remarks -->
+      <div class="form-group full-width">
+        <label for="remarks">Remarks</label>
+        <textarea
+          id="remarks"
+          class="form-control"
+          formControlName="remarks"
+          rows="3"
+          placeholder="Enter any remarks..."
+        ></textarea>
+      </div>
+    </div>
+  </form>
+
+  <!-- Modal Footer -->
+  <div modal-footer>
+    <button class="btn-cancel" (click)="closeModal()" [disabled]="isLoading">
+      Cancel
+    </button>
+    <button class="btn-submit" (click)="handleSubmit()" [disabled]="isLoading">
+      <app-icon *ngIf="isLoading" [icon]="'loader'" class="spinner"></app-icon>
+      {{ isEditMode ? "Update Exit" : "Create Exit" }}
+    </button>
+  </div>
+</app-modal>

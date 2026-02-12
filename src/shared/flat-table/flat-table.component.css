@@ -1,0 +1,85 @@
+.table {
+  border-collapse: collapse;
+  width: 100%;
+  color: var(--custom-table-text);
+}
+
+/* Table header: only bottom border */
+.table th {
+  color: var(--custom-table-text);
+  font-weight: 600;
+  font-size: 14.4px;
+  background-color: var(--cardbg);
+  border-right: 1px solid var(--custom-table-border); /* right line */
+  text-align: left;
+  border-bottom: 1px solid var(--custom-table-border); /* only underline */
+  border-top: 1px solid var(--custom-table-border); /* only underline */
+}
+.table th:first-child {
+  border-left: 1px solid var(--custom-table-border); /* left line */
+}
+.table td:first-child {
+  border-left: 1px solid var(--custom-table-border); /* left line */
+}
+/* Table cells: no borders */
+.table td {
+  color: var(--custom-table-text);
+  font-size: 14px;
+  border-right: 1px solid var(--custom-table-border); /* right line */
+  border-bottom: 1px solid var(--custom-table-border); /* right line */
+  background-color: var(--cardbg);
+}
+.table th,
+.table td {
+  padding: 0.5rem 0.3rem; /* reduce spacing */
+}
+
+.table th {
+  padding-bottom: 0.4rem; /* make header closer to rows */
+}
+/* Stripe odd rows */
+.table tbody tr:nth-child(odd) td {
+  background-color: var(--custom-table-striped-bg);
+}
+
+/* Responsive empty state */
+.empty-state-cell {
+  text-align: center;
+  padding: 2rem 1rem;
+  vertical-align: middle;
+  color: var(--custom-table-muted);
+}
+
+.empty-icon {
+  width: 60px;
+  height: 60px;
+  margin: 0 auto 16px;
+  opacity: 0.3;
+}
+
+.empty-icon svg {
+  fill: currentColor;
+  width: 100%;
+  height: 100%;
+}
+
+.empty-text {
+  font-size: 15px;
+  color: var(--text-secondary);
+}
+/* Prevent shrinking/wrapping of header and cells */
+.table th,
+.table td {
+  white-space: nowrap; /* keep text in one line */
+  text-overflow: ellipsis; /* optional: show ... if too long */
+}
+
+/* Make table scroll horizontally */
+.table-responsive {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch; /* smooth scrolling on mobile */
+}
+.showing-text {
+  font-size: 14px;
+  color: var(--text-muted);
+}

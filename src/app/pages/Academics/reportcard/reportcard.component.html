@@ -1,0 +1,273 @@
+<div class="reportcard-container mt-4">
+  <div class="card">
+    <div class="card-body">
+      <!-- Header Section with Search and New Button -->
+      <div class="reportcard-header">
+        <div class="search-section">
+          <div class="search-container">
+            <select class="search-filter" [(ngModel)]="searchFilter">
+              <option
+                *ngFor="let filter of searchFilters"
+                [value]="filter.value"
+              >
+                {{ filter.label }}
+              </option>
+            </select>
+            <div class="search-input-wrapper">
+              <app-icon [icon]="'search'" class="search-icon"></app-icon>
+              <input
+                type="text"
+                class="search-input"
+                placeholder="Search report cards..."
+                [(ngModel)]="searchQuery"
+                (keyup.enter)="onSearch()"
+              />
+            </div>
+            <button
+              class="btn-search"
+              (click)="onSearch()"
+              [disabled]="loadingReportCards"
+            >
+              {{ loadingReportCards ? "Searching..." : "Search" }}
+            </button>
+          </div>
+        </div>
+        <button class="btn-new" (click)="onNewReportCard()">
+          <app-icon [icon]="'plus'" class="btn-icon"></app-icon>
+          New Report Card
+        </button>
+      </div>
+
+      <!-- PrimeNG Table -->
+      <app-prime-table
+        [data]="filteredReportCards"
+        [columns]="columns"
+        [actions]="actions"
+        [rows]="10"
+        [rowsPerPageOptions]="[10, 25, 50]"
+        [paginator]="true"
+        [striped]="true"
+        [loading]="loadingReportCards"
+        [globalFilterFields]="[
+          'reportCardId',
+          'studentId',
+          'studentName',
+          'academicSession'
+        ]"
+      ></app-prime-table>
+    </div>
+  </div>
+</div>
+
+<!-- Create/Update Report Card Modal -->
+
+<app-modal
+  [isOpen]="isModalOpen"
+  [title]="isEditMode ? 'Update Report Card' : 'Create New Report Card'"
+  [size]="'lg'"
+  (onClose)="closeModal()"
+>
+  <form [formGroup]="reportCardForm" class="reportcard-form">
+    <div class="form-grid">
+      <div class="form-group">
+        <label for="reportCardId">Report Card ID *</label>
+        <input
+          type="text"
+          id="reportCardId"
+          class="form-control"
+          formControlName="reportCardId"
+          placeholder="Enter report card ID"
+          [class.invalid]="isFieldInvalid('reportCardId')"
+        />
+        <span class="error-message" *ngIf="isFieldInvalid('reportCardId')">
+          Report Card ID is required
+        </span>
+      </div>
+
+      <div class="form-group">
+        <label for="studentId">Student ID *</label>
+        <input
+          type="text"
+          id="studentId"
+          class="form-control"
+          formControlName="studentId"
+          placeholder="Enter student ID"
+          [class.invalid]="isFieldInvalid('studentId')"
+        />
+        <span class="error-message" *ngIf="isFieldInvalid('studentId')">
+          Student ID is required
+        </span>
+      </div>
+
+      <div class="form-group">
+        <label for="academicSession">Academic Session *</label>
+        <ng-select
+          id="academicSession"
+          formControlName="academicSession"
+          [items]="academicSessions"
+          bindLabel="referenceName"
+          bindValue="referenceId"
+          placeholder="Select academic session"
+          [clearable]="true"
+          [searchable]="true"
+          [loading]="loadingLookups"
+          class="custom-ng-select"
+          [class.invalid]="isFieldInvalid('academicSession')"
+        ></ng-select>
+        <span class="error-message" *ngIf="isFieldInvalid('academicSession')">
+          Academic Session is required
+        </span>
+      </div>
+
+      <div class="form-group">
+        <label for="academicTerm">Academic Term *</label>
+        <ng-select
+          id="academicTerm"
+          formControlName="academicTerm"
+          [items]="academicTerms"
+          bindLabel="referenceName"
+          bindValue="referenceId"
+          placeholder="Select academic term"
+          [clearable]="true"
+          [searchable]="true"
+          [loading]="loadingLookups"
+          class="custom-ng-select"
+          [class.invalid]="isFieldInvalid('academicTerm')"
+        ></ng-select>
+        <span class="error-message" *ngIf="isFieldInvalid('academicTerm')">
+          Academic Term is required
+        </span>
+      </div>
+
+      <div class="form-group">
+        <label for="classId">Class *</label>
+        <ng-select
+          id="classId"
+          class="custom-ng-select"
+          formControlName="classId"
+          [items]="classes"
+          bindLabel="className"
+          bindValue="classId"
+          placeholder="Select class"
+          [clearable]="true"
+          [searchable]="true"
+          [loading]="loadingLookups"
+          [class.invalid]="isFieldInvalid('classId')"
+        >
+          <ng-template ng-option-tmp let-item="item">
+            <div>{{ item.classId }} - {{ item.className }}</div>
+          </ng-template>
+        </ng-select>
+        <span class="error-message" *ngIf="isFieldInvalid('classId')">
+          Class is required
+        </span>
+      </div>
+
+      <div class="form-group">
+        <label for="totalScore">Total Score *</label>
+        <input
+          type="number"
+          id="totalScore"
+          class="form-control"
+          formControlName="totalScore"
+          placeholder="Enter total score"
+          min="0"
+          [class.invalid]="isFieldInvalid('totalScore')"
+        />
+        <span class="error-message" *ngIf="isFieldInvalid('totalScore')">
+          Total Score is required
+        </span>
+      </div>
+
+      <div class="form-group">
+        <label for="averageScore">Average Score *</label>
+        <input
+          type="number"
+          id="averageScore"
+          class="form-control"
+          formControlName="averageScore"
+          placeholder="Enter average score"
+          min="0"
+          max="100"
+          step="0.01"
+          [class.invalid]="isFieldInvalid('averageScore')"
+        />
+        <span class="error-message" *ngIf="isFieldInvalid('averageScore')">
+          Average Score is required (0-100)
+        </span>
+      </div>
+
+      <div class="form-group">
+        <label for="grade">Grade *</label>
+        <input
+          type="text"
+          id="grade"
+          class="form-control"
+          formControlName="grade"
+          placeholder="Enter grade (e.g., A, B+)"
+          [class.invalid]="isFieldInvalid('grade')"
+        />
+        <span class="error-message" *ngIf="isFieldInvalid('grade')">
+          Grade is required
+        </span>
+      </div>
+
+      <div class="form-group">
+        <label for="position">Position *</label>
+        <input
+          type="number"
+          id="position"
+          class="form-control"
+          formControlName="position"
+          placeholder="Enter position"
+          min="1"
+          [class.invalid]="isFieldInvalid('position')"
+        />
+        <span class="error-message" *ngIf="isFieldInvalid('position')">
+          Position is required
+        </span>
+      </div>
+
+      <div class="form-group">
+        <label for="status">Status *</label>
+        <ng-select
+          id="status"
+          formControlName="status"
+          [items]="reportCardStatuses"
+          bindLabel="referenceName"
+          bindValue="referenceId"
+          placeholder="Select status"
+          [clearable]="false"
+          [searchable]="false"
+          class="custom-ng-select"
+          [class.invalid]="isFieldInvalid('status')"
+        ></ng-select>
+        <span class="error-message" *ngIf="isFieldInvalid('status')">
+          Status is required
+        </span>
+      </div>
+
+      <div class="form-group full-width">
+        <label for="remarks">Remarks</label>
+        <textarea
+          id="remarks"
+          class="form-control"
+          formControlName="remarks"
+          placeholder="Enter remarks"
+          rows="3"
+        ></textarea>
+      </div>
+    </div>
+  </form>
+
+  <!-- Modal Footer -->
+  <div modal-footer>
+    <button class="btn-cancel" (click)="closeModal()" [disabled]="isLoading">
+      Cancel
+    </button>
+    <button class="btn-submit" (click)="handleSubmit()" [disabled]="isLoading">
+      <app-icon *ngIf="isLoading" name="loader" class="spinner"></app-icon>
+      {{ isEditMode ? "Update Report Card" : "Create Report Card" }}
+    </button>
+  </div>
+</app-modal>

@@ -1,0 +1,122 @@
+<div class="classessection-container mt-4">
+  <div class="card">
+    <div class="card-body">
+      <!-- Header Section with Search and New Button -->
+      <div class="classessection-header">
+        <div class="search-section">
+          <div class="search-container">
+            <select class="search-filter" [(ngModel)]="searchFilter">
+              <option
+                *ngFor="let filter of searchFilters"
+                [value]="filter.value"
+              >
+                {{ filter.label }}
+              </option>
+            </select>
+            <div class="search-input-wrapper">
+              <app-icon [icon]="'search'" class="search-icon"></app-icon>
+              <input
+                type="text"
+                class="search-input"
+                placeholder="Search classes..."
+                [(ngModel)]="searchQuery"
+                (keyup.enter)="onSearch()"
+              />
+            </div>
+            <button
+              class="btn-search"
+              (click)="onSearch()"
+              [disabled]="loadingClasses"
+            >
+              {{ loadingClasses ? "Searching..." : "Search" }}
+            </button>
+          </div>
+        </div>
+        <button class="btn-new" (click)="onNewClass()">
+          <app-icon [icon]="'plus'" class="btn-icon"></app-icon>
+          New Class
+        </button>
+      </div>
+
+      <!-- PrimeNG Table -->
+      <app-prime-table
+        [data]="filteredClassSections"
+        [columns]="columns"
+        [actions]="actions"
+        [rows]="10"
+        [rowsPerPageOptions]="[10, 25, 50]"
+        [paginator]="true"
+        [striped]="true"
+        [loading]="loadingClasses"
+        [globalFilterFields]="['classId', 'className', 'subClassId']"
+      >
+      </app-prime-table>
+    </div>
+  </div>
+</div>
+
+<!-- Create/Update Class Modal -->
+<app-modal
+  [isOpen]="isModalOpen"
+  [title]="isEditMode ? 'Update Class' : 'Create New Class'"
+  [size]="'lg'"
+  (onClose)="closeModal()"
+>
+  <form [formGroup]="classForm" class="class-form">
+    <div class="row">
+      <!-- Class ID -->
+      <div class="form-group col-md-6">
+        <label for="classId">Class ID <span class="required">*</span></label>
+        <input
+          type="text"
+          id="classId"
+          class="form-control"
+          formControlName="classId"
+          [class.invalid]="isFieldInvalid('classId')"
+        />
+        <span class="error-message" *ngIf="isFieldInvalid('classId')">
+          Class ID is required
+        </span>
+      </div>
+
+      <!-- Sub Class ID -->
+      <div class="form-group col-md-6">
+        <label for="subClassId">Sub Class ID</label>
+        <input
+          type="text"
+          id="subClassId"
+          class="form-control"
+          formControlName="subClassId"
+        />
+      </div>
+
+      <!-- Class Name -->
+      <div class="form-group col-12">
+        <label for="className"
+          >Class Name <span class="required">*</span></label
+        >
+        <input
+          type="text"
+          id="className"
+          class="form-control"
+          formControlName="className"
+          [class.invalid]="isFieldInvalid('className')"
+        />
+        <span class="error-message" *ngIf="isFieldInvalid('className')">
+          Class Name is required
+        </span>
+      </div>
+    </div>
+  </form>
+
+  <!-- Modal Footer -->
+  <div modal-footer>
+    <button class="btn-cancel" (click)="closeModal()" [disabled]="isLoading">
+      Cancel
+    </button>
+    <button class="btn-submit" (click)="handleSubmit()" [disabled]="isLoading">
+      <app-icon *ngIf="isLoading" [icon]="'loader'" class="spinner"></app-icon>
+      {{ isEditMode ? "Update Class" : "Create Class" }}
+    </button>
+  </div>
+</app-modal>

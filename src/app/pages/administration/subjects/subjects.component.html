@@ -1,0 +1,147 @@
+<div class="subjects-container mt-4">
+  <div class="card">
+    <div class="card-body">
+      <!-- Header Section with Search and New Button -->
+      <div class="subjects-header">
+        <div class="search-section">
+          <div class="search-container">
+            <select class="search-filter" [(ngModel)]="searchFilter">
+              <option
+                *ngFor="let filter of searchFilters"
+                [value]="filter.value"
+              >
+                {{ filter.label }}
+              </option>
+            </select>
+            <div class="search-input-wrapper">
+              <app-icon [icon]="'search'" class="search-icon"></app-icon>
+              <input
+                type="text"
+                class="search-input"
+                placeholder="Search subjects..."
+                [(ngModel)]="searchQuery"
+                (keyup.enter)="onSearch()"
+              />
+            </div>
+            <button
+              class="btn-search"
+              (click)="onSearch()"
+              [disabled]="loadingSubjects"
+            >
+              {{ loadingSubjects ? "Searching..." : "Search" }}
+            </button>
+          </div>
+        </div>
+        <button class="btn-new" (click)="onNewSubject()">
+          <app-icon [icon]="'plus'" class="btn-icon"></app-icon>
+          New Subject
+        </button>
+      </div>
+
+      <!-- PrimeNG Table -->
+      <app-prime-table
+        [data]="filteredSubjects"
+        [columns]="columns"
+        [actions]="actions"
+        [rows]="10"
+        [rowsPerPageOptions]="[10, 25, 50]"
+        [paginator]="true"
+        [striped]="true"
+        [loading]="loadingSubjects"
+        [globalFilterFields]="['subjectId', 'subjectName', 'parentSubjectId']"
+      >
+      </app-prime-table>
+    </div>
+  </div>
+</div>
+
+<!-- Create/Update Subject Modal -->
+<app-modal
+  [isOpen]="isModalOpen"
+  [title]="isEditMode ? 'Update Subject' : 'Create New Subject'"
+  [size]="'lg'"
+  (onClose)="closeModal()"
+>
+  <form [formGroup]="subjectForm" class="subject-form">
+    <div class="form-grid">
+      <!-- Subject ID -->
+      <div class="form-group">
+        <label for="subjectId"
+          >Subject ID <span class="required">*</span></label
+        >
+        <input
+          type="text"
+          id="subjectId"
+          class="form-control"
+          formControlName="subjectId"
+          [class.invalid]="isFieldInvalid('subjectId')"
+        />
+        <span class="error-message" *ngIf="isFieldInvalid('subjectId')">
+          Subject ID is required
+        </span>
+      </div>
+
+      <!-- Subject Name -->
+      <div class="form-group">
+        <label for="subjectName"
+          >Subject Name <span class="required">*</span></label
+        >
+        <input
+          type="text"
+          id="subjectName"
+          class="form-control"
+          formControlName="subjectName"
+          [class.invalid]="isFieldInvalid('subjectName')"
+        />
+        <span class="error-message" *ngIf="isFieldInvalid('subjectName')">
+          Subject Name is required
+        </span>
+      </div>
+
+      <!-- Parent Subject ID -->
+      <div class="form-group">
+        <label for="parentSubjectId">Parent Subject</label>
+        <ng-select
+          id="parentSubjectId"
+          class="custom-ng-select"
+          formControlName="parentSubjectId"
+          [items]="availableSubjects"
+          bindLabel="subjectName"
+          bindValue="subjectId"
+          placeholder="Select parent subject"
+          [clearable]="true"
+          [searchable]="true"
+          [loading]="loadingAvailableSubjects"
+        >
+          <ng-template ng-option-tmp let-item="item">
+            <div>{{ item.subjectId }} - {{ item.subjectName }}</div>
+          </ng-template>
+        </ng-select>
+      </div>
+
+      <!-- Percentage of Parent -->
+      <div class="form-group">
+        <label for="percentageOfParent">Percentage of Parent</label>
+        <input
+          type="number"
+          id="percentageOfParent"
+          class="form-control"
+          formControlName="percentageOfParent"
+          min="0"
+          max="100"
+        />
+      </div>
+    </div>
+  </form>
+
+  <!-- Modal Footer -->
+  <div modal-footer>
+    <button class="btn-cancel" (click)="closeModal()" [disabled]="isLoading">
+      Cancel
+    </button>
+    <button class="btn-submit" (click)="handleSubmit()" [disabled]="isLoading">
+      <app-icon *ngIf="isLoading" [icon]="'loader'" class="spinner"></app-icon>
+      {{ isEditMode ? "Update Subject" : "Create Subject" }}
+    </button>
+  </div>
+</app-modal>

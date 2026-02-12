@@ -1,0 +1,100 @@
+<div class="simple-table-wrapper">
+  <div class="table-container">
+    <table class="simple-table">
+      <!-- Header -->
+      <thead>
+        <tr>
+          <th
+            *ngFor="let col of columns"
+            [style.width]="col.width || 'auto'"
+            [style.minWidth]="col.width || 'auto'"
+            [class.sortable]="col.sortable"
+            (click)="col.field !== 'select' && onSort(col.field, col.sortable)"
+          >
+            <!-- Header Checkbox -->
+            <ng-container *ngIf="col.field === 'select'">
+              <input
+                type="checkbox"
+                class="header-checkbox"
+                [checked]="headerCheckboxState?.()"
+                (click)="$event.stopPropagation()"
+                (change)="headerCheckboxChange?.($event)"
+              />
+            </ng-container>
+
+            <ng-container *ngIf="col.field !== 'select'">
+              {{ col.header }}
+              <app-icon
+                *ngIf="col.sortable && sortField === col.field"
+                [icon]="sortOrder === 1 ? 'chevron-up' : 'chevron-down'"
+                class="sort-icon"
+              ></app-icon>
+            </ng-container>
+          </th>
+
+          <th *ngIf="actions.length > 0" class="actions-header">Action</th>
+        </tr>
+      </thead>
+
+      <!-- Body -->
+      <tbody>
+        <tr *ngFor="let row of paginatedData">
+          <td
+            *ngFor="let col of columns"
+            [style.width]="col.width || 'auto'"
+            [style.minWidth]="col.width || 'auto'"
+          >
+            <ng-container *ngIf="bodyTemplate; else defaultCell">
+              <ng-container
+                [ngTemplateOutlet]="bodyTemplate"
+                [ngTemplateOutletContext]="{ $implicit: row, field: col.field }"
+              ></ng-container>
+            </ng-container>
+
+            <ng-template #defaultCell>
+              {{ row[col.field] }}
+            </ng-template>
+          </td>
+
+          <!-- Actions -->
+          <td *ngIf="actions.length > 0" class="actions-cell">
+            <div class="action-menu-wrapper">
+              <button
+                type="button"
+                class="ellipsis-btn"
+                (click)="toggleMenu(row, $event); $event.stopPropagation()"
+              >
+                <app-icon [icon]="'more-vertical'"></app-icon>
+              </button>
+
+              <div
+                class="dropdown-menu"
+                *ngIf="openMenuId === getRowId(row)"
+                [style.top]="menuPosition.top"
+                [style.left]="menuPosition.left"
+              >
+                <button
+                  *ngFor="let action of actions"
+                  type="button"
+                  class="dropdown-item"
+                  [ngClass]="action.styleClass"
+                  (click)="executeAction(action, row); $event.stopPropagation()"
+                >
+                  <app-icon [icon]="action.icon"></app-icon>
+                  {{ action.label }}
+                </button>
+              </div>
+            </div>
+          </td>
+        </tr>
+
+        <!-- Empty -->
+        <tr *ngIf="paginatedData.length === 0">
+          <td [attr.colspan]="columns.length + (actions.length ? 1 : 0)">
+            <div class="empty-state">No data available</div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

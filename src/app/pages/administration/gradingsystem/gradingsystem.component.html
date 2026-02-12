@@ -1,0 +1,175 @@
+<div class="grading-system-container mt-4">
+  <div class="card">
+    <div class="card-body">
+      <!-- Header Section with Search and New Button -->
+      <div class="grading-system-header">
+        <button class="btn-new" (click)="onNewGrade()">
+          <app-icon [icon]="'plus'" class="btn-icon"></app-icon>
+          New Grade
+        </button>
+      </div>
+
+      <!-- PrimeNG Table -->
+      <!-- <app-prime-table
+        [data]="filteredGrades"
+        [columns]="columns"
+        [actions]="actions"
+        [rows]="10"
+        [rowsPerPageOptions]="[10, 25, 50]"
+        [paginator]="true"
+        [striped]="true"
+        [loading]="loadingGrades"
+        [globalFilterFields]="['gradeId', 'programmeId', 'remarks']"
+      >
+      </app-prime-table> -->
+
+      <app-prime-table
+        [data]="filteredGrades"
+        [columns]="columns"
+        [actions]="actions"
+        [rows]="10"
+        [paginator]="true"
+        [loading]="loadingGrades"
+        rowGroupMode="subheader"
+        groupRowsBy="programmeId"
+        sortField="programmeId"
+        sortMode="single"
+      >
+      </app-prime-table>
+    </div>
+  </div>
+</div>
+
+<!-- Create/Update Grade Modal -->
+<app-modal
+  [isOpen]="isModalOpen"
+  [title]="isEditMode ? 'Update Grade' : 'Create New Grade'"
+  [size]="'lg'"
+  (onClose)="closeModal()"
+>
+  <form [formGroup]="gradingForm" class="grading-form">
+    <div class="form-grid">
+      <!-- Programme (full width first) -->
+      <div class="form-group full-width">
+        <label for="programmeId"
+          >Programme <span class="required">*</span></label
+        >
+        <select
+          id="programmeId"
+          class="form-control"
+          formControlName="programmeId"
+          [class.invalid]="isFieldInvalid('programmeId')"
+        >
+          <option value="" disabled selected>Select a programme</option>
+          <option
+            *ngFor="let programme of programmes"
+            [value]="programme.referenceId"
+          >
+            {{ programme.referenceName }}
+          </option>
+        </select>
+        <span class="error-message" *ngIf="isFieldInvalid('programmeId')">
+          Programme is required
+        </span>
+        <p
+          *ngIf="!loadingLookUps && programmes.length === 0"
+          class="text-warning mt-1"
+        >
+          No programmes available for this Merchant.
+        </p>
+      </div>
+
+      <!-- Grade ID and Grade Point on the same line -->
+      <div class="form-group half-width">
+        <label for="gradeId">Grade ID <span class="required">*</span></label>
+        <input
+          type="text"
+          id="gradeId"
+          class="form-control"
+          formControlName="gradeId"
+          [class.invalid]="isFieldInvalid('gradeId')"
+          placeholder="e.g., A, B, C"
+        />
+        <span class="error-message" *ngIf="isFieldInvalid('gradeId')">
+          Grade ID is required
+        </span>
+      </div>
+
+      <div class="form-group half-width">
+        <label for="gradePoint"
+          >Grade Point <span class="required">*</span></label
+        >
+        <input
+          type="number"
+          id="gradePoint"
+          class="form-control"
+          formControlName="gradePoint"
+          [class.invalid]="isFieldInvalid('gradePoint')"
+          min="0"
+          max="5"
+          step="0.01"
+          placeholder="e.g. 5.0"
+        />
+        <span class="error-message" *ngIf="isFieldInvalid('gradePoint')">
+          Grade Point is required
+        </span>
+      </div>
+
+      <!-- Min and Max Marks on next line -->
+      <div class="form-group half-width">
+        <label for="minMark"
+          >Min Mark (%) <span class="required">*</span></label
+        >
+        <input
+          type="number"
+          id="minMark"
+          class="form-control"
+          formControlName="minMark"
+          min="0"
+          max="100"
+          step="0.01"
+          placeholder="0"
+        />
+      </div>
+
+      <div class="form-group half-width">
+        <label for="maxMark"
+          >Max Mark (%) <span class="required">*</span></label
+        >
+        <input
+          type="number"
+          id="maxMark"
+          class="form-control"
+          formControlName="maxMark"
+          min="0"
+          max="100"
+          step="0.01"
+          placeholder="100"
+        />
+      </div>
+
+      <!-- Remarks (full width) -->
+      <div class="form-group full-width">
+        <label for="remarks">Remarks</label>
+        <textarea
+          id="remarks"
+          class="form-control"
+          formControlName="remarks"
+          rows="3"
+          placeholder="Enter any additional remarks..."
+        ></textarea>
+      </div>
+    </div>
+  </form>
+
+  <!-- Modal Footer -->
+  <div modal-footer>
+    <button class="btn-cancel" (click)="closeModal()" [disabled]="isLoading">
+      Cancel
+    </button>
+    <button class="btn-submit" (click)="handleSubmit()" [disabled]="isLoading">
+      <app-icon *ngIf="isLoading" [icon]="'loader'" class="spinner"></app-icon>
+      {{ isEditMode ? "Update Grade" : "Create Grade" }}
+    </button>
+  </div>
+</app-modal>

@@ -1,0 +1,117 @@
+<div
+  class="vertical-menu"
+  [class.collapsed]="!sidebarOpen"
+  [class.open]="sidebarOpen && isMobileView()"
+>
+  <!-- Sidebar Header -->
+  <div class="sidebar-header">
+    <!-- Logo Box -->
+    <div class="navbar-brand-box">
+      <a routerLink="/" class="logo d-flex align-items-center">
+        <!-- SPIK Logo -->
+        <svg
+          width=" 25"
+          height="25"
+          viewBox="0 0 50 66"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+          class="company-logo"
+        >
+          <path
+            d="M0 14.7059C0 6.58405 6.58405 0 14.7059 0V14.7059H0Z"
+            fill="#38AAFE"
+          />
+          <rect x="17.6471" width="14.7059" height="14.7059" fill="#9B51E0" />
+          <path d="M35.2941 0H50V14.7059H35.2941V0Z" fill="#38AAFE" />
+          <path
+            d="M35.2941 18.3823H50C50 26.5042 43.4159 33.0882 35.2941 33.0882V18.3823Z"
+            fill="#9B51E0"
+          />
+          <rect x="17.6471" y="18.3823" width="14" height="14" fill="#E1AFFD" />
+          <path d="M0 18.3823H14.7059V33.0882H0V18.3823Z" fill="#9B51E0" />
+          <path d="M0 33.0882H14.7059V47.7941H0V33.0882Z" fill="#9B51E0" />
+          <path
+            d="M14.7059 50.7354H-2.86102e-06C-2.86102e-06 58.8572 6.58405 65.4412 14.7059 65.4412V50.7354Z"
+            fill="#E1AFFD"
+          />
+        </svg>
+
+        <!-- Company Name -->
+        <h5 *ngIf="sidebarOpen" class="mb-0 fw-bold ms-3 logo-text">
+          ACADEMIA
+        </h5>
+      </a>
+    </div>
+
+    <!-- Toggle Button -->
+    <!--  <button
+      class="sidebar-toggle-btn"
+      (click)="toggleSidebar()"
+      aria-label="Toggle sidebar"
+    >
+      <app-icon
+        [icon]="sidebarOpen ? 'chevron-left' : 'menu'"
+        size="18"
+      ></app-icon>
+    </button> -->
+  </div>
+  <div class="sidebar-content">
+    <div class="sidebar-menu-scroll mt-4">
+      <ul class="side-menu">
+        <li
+          *ngFor="let item of menuItems"
+          (mouseenter)="onItemHover(item, true)"
+          (mouseleave)="onItemHover(item, false)"
+          [routerLinkActive]="['active']"
+          [class.active]="isActive(item) || item.open"
+          [routerLinkActiveOptions]="{ exact: false }"
+        >
+          <!-- Parent with link -->
+          <a
+            *ngIf="item.link"
+            [routerLink]="item.link"
+            class="side-nav-link-ref"
+            [attr.title]="!sidebarOpen ? item.label : null"
+          >
+            <app-icon [icon]="item.icon!" class="" size="14"></app-icon>
+            <span class="label">{{ item.label }}</span>
+          </a>
+
+          <!-- Parent with submenu -->
+          <a
+            *ngIf="!item.link"
+            (click)="toggleSubmenu(item)"
+            class="side-nav-link-ref has-arrow"
+            [attr.title]="!sidebarOpen ? item.label : null"
+          >
+            <app-icon [icon]="item.icon!" class="" size="15"></app-icon>
+            <span class="label">{{ item.label }}</span>
+            <!-- hide chevron in collapsed via CSS; keep it in DOM -->
+            <app-icon
+              icon="chevron-down"
+              class="ms-auto chevron-icon"
+              [ngClass]="{ rotate: item.open }"
+              size="14"
+            ></app-icon>
+          </a>
+
+          <ul
+            *ngIf="item.subItems?.length"
+            class="sub-menu"
+            [class.show]="sidebarOpen && item.open"
+          >
+            <li
+              *ngFor="let sub of item.subItems"
+              [routerLinkActive]="['active']"
+              [routerLinkActiveOptions]="{ exact: true }"
+            >
+              <a [routerLink]="sub.link" class="side-nav-link-ref">
+                {{ sub.label }}
+              </a>
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>

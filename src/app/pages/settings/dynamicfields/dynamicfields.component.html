@@ -1,0 +1,135 @@
+<div class="dynamic-fields-container mt-4">
+  <div class="card">
+    <div class="card-body">
+      <!-- Header Section with Search and New Button -->
+      <div class="dynamic-fields-header">
+        <div class="search-section">
+          <div class="search-container">
+            <select
+              class="search-filter"
+              [(ngModel)]="searchFilter"
+              (ngModelChange)="onMetaDataTypeChange()"
+            >
+              <option value="">Select Meta Data Type</option>
+              <option *ngFor="let type of dynamicTypes" [value]="type">
+                {{ type }}
+              </option>
+            </select>
+            <div class="search-input-wrapper">
+              <app-icon [icon]="'search'" class="search-icon"></app-icon>
+              <input
+                type="text"
+                class="search-input"
+                placeholder="Search by Reference ID..."
+                [(ngModel)]="searchQuery"
+                (keyup.enter)="onSearch()"
+              />
+            </div>
+            <button
+              class="btn-search"
+              (click)="onSearch()"
+              [disabled]="loadingDynamicFields"
+            >
+              {{ loadingDynamicFields ? "Searching..." : "Search" }}
+            </button>
+          </div>
+        </div>
+        <button class="btn-new" (click)="onNewDynamicField()">
+          <app-icon [icon]="'plus'" class="btn-icon"></app-icon>
+          New Dynamic Field
+        </button>
+      </div>
+
+      <!-- PrimeNG Table -->
+      <app-prime-table
+        [data]="filteredDynamicFields"
+        [columns]="columns"
+        [actions]="actions"
+        [rows]="10"
+        [rowsPerPageOptions]="[10, 25, 50]"
+        [paginator]="true"
+        [striped]="true"
+        [loading]="loadingDynamicFields"
+        [globalFilterFields]="['referenceId', 'referenceName', 'metaDataType']"
+      >
+      </app-prime-table>
+    </div>
+  </div>
+</div>
+
+<!-- Create/Update Dynamic Field Modal -->
+<app-modal
+  [isOpen]="isModalOpen"
+  [title]="isEditMode ? 'Update Dynamic Field' : 'Create New Dynamic Field'"
+  [size]="'lg'"
+  (onClose)="closeModal()"
+>
+  <form [formGroup]="dynamicFieldForm" class="dynamic-field-form">
+    <div class="row">
+      <!-- Reference ID -->
+      <div class="form-group col-12 col-md-6">
+        <label for="referenceId">
+          Reference ID <span class="required">*</span>
+        </label>
+        <input
+          type="text"
+          id="referenceId"
+          class="form-control"
+          formControlName="referenceId"
+          [class.invalid]="isFieldInvalid('referenceId')"
+        />
+        <span class="error-message" *ngIf="isFieldInvalid('referenceId')">
+          Reference ID is required
+        </span>
+      </div>
+
+      <!-- Meta Data Type -->
+      <div class="form-group col-12 col-md-6">
+        <label for="metaDataType">
+          Meta Data Type <span class="required">*</span>
+        </label>
+        <select
+          id="metaDataType"
+          class="form-control"
+          formControlName="metaDataType"
+          [class.invalid]="isFieldInvalid('metaDataType')"
+        >
+          <option value="">Select Meta Data Type</option>
+          <option *ngFor="let type of dynamicTypes" [value]="type">
+            {{ type }}
+          </option>
+        </select>
+        <span class="error-message" *ngIf="isFieldInvalid('metaDataType')">
+          Meta Data Type is required
+        </span>
+      </div>
+      <!-- Reference Name -->
+      <div class="form-group col-12">
+        <label for="referenceName">
+          Reference Name <span class="required">*</span>
+        </label>
+        <input
+          type="text"
+          id="referenceName"
+          class="form-control"
+          formControlName="referenceName"
+          [class.invalid]="isFieldInvalid('referenceName')"
+        />
+        <span class="error-message" *ngIf="isFieldInvalid('referenceName')">
+          Reference Name is required
+        </span>
+      </div>
+    </div>
+  </form>
+
+  <!-- Modal Footer -->
+  <div modal-footer>
+    <button class="btn-cancel" (click)="closeModal()" [disabled]="isLoading">
+      Cancel
+    </button>
+    <button class="btn-submit" (click)="handleSubmit()" [disabled]="isLoading">
+      <app-icon *ngIf="isLoading" [icon]="'loader'" class="spinner"></app-icon>
+      {{ isEditMode ? "Update Dynamic Field" : "Create Dynamic Field" }}
+    </button>
+  </div>
+</app-modal>

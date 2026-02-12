@@ -1,0 +1,369 @@
+/* Simple Table Wrapper */
+.simple-table-wrapper {
+  background: white;
+  border-radius: 8px;
+  overflow: visible;
+  border: 1px solid #e5e7eb;
+  position: relative;
+}
+
+/* Table Container */
+.table-container {
+  overflow-x: auto;
+  overflow-y: visible;
+  position: relative;
+}
+
+/* Simple Table */
+.simple-table {
+  width: 100%;
+  table-layout: fixed;
+  border-collapse: collapse;
+}
+
+
+
+/* Table Header */
+.simple-table thead {
+  background: #f9fafb;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+
+
+.simple-table thead th {
+  padding: 12px 16px;
+  text-align: left;
+  font-size: 13px;
+  font-weight: 600;
+  color: #6b7280;
+  white-space: nowrap;
+  vertical-align: middle;
+}
+
+.simple-table thead th.sortable {
+  cursor: pointer;
+  user-select: none;
+}
+
+.simple-table thead th.sortable:hover {
+  background: #f3f4f6;
+}
+
+.simple-table thead th:first-child {
+  text-align: center;
+  width: 50px;
+  min-width: 50px;
+}
+
+/* Header checkbox styling */
+.header-checkbox {
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+  accent-color: #9b51e0;
+  margin: 0;
+  vertical-align: middle;
+}
+
+/* Prevent sorting on checkbox column */
+.simple-table thead th:first-child.sortable {
+  cursor: default;
+}
+
+.simple-table thead th:first-child:hover {
+  background: #f9fafb !important;
+}
+
+/* Remove sort icon from checkbox column */
+.simple-table thead th:first-child .sort-icon {
+  display: none;
+}
+
+.sort-icon {
+  display: inline-block;
+  margin-left: 4px;
+  font-size: 12px;
+  color: #9b51e0;
+  vertical-align: middle;
+}
+
+/* Table Body */
+.simple-table tbody tr {
+  border-bottom: 1px solid #f3f4f6;
+  transition: background-color 0.15s ease;
+  position: relative;
+}
+
+/* Striped Rows */
+.simple-table tbody tr:nth-child(even) {
+  background-color: #f9fafb;
+}
+
+.simple-table tbody tr:hover {
+  background-color: #f3f4f6;
+}
+
+.simple-table tbody td {
+  padding: 12px 16px;
+  font-size: 14px;
+  color: #374151;
+  overflow: visible;
+  vertical-align: middle;
+}
+
+/* First column (checkbox column) in body */
+.simple-table tbody td:first-child {
+  text-align: center;
+  width: 50px;
+  min-width: 50px;
+  max-width: 50px;
+}
+
+/* Checkbox in body rows */
+.simple-table tbody td:first-child input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+  accent-color: #9b51e0;
+  margin: 0;
+  vertical-align: middle;
+}
+
+/* Disabled checkbox styling */
+.simple-table tbody td:first-child input[type="checkbox"]:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Actions Column */
+.actions-header {
+  width: 80px;
+  text-align: center !important;
+  min-width: 80px;
+}
+
+.actions-header-icon {
+  color: #9ca3af;
+  font-size: 16px;
+}
+
+.actions-cell {
+  text-align: center;
+  position: relative;
+  width: 80px;
+  min-width: 80px;
+}
+
+.action-menu-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+/* Ellipsis Button */
+.ellipsis-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  background: transparent;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  color: #6b7280;
+}
+
+.ellipsis-btn:hover {
+  background: #f3f4f6;
+  color: #9b51e0;
+}
+
+/* Dropdown Menu */
+.dropdown-menu {
+  display: block;
+  position: fixed;
+  min-width: 160px;
+  background: #ffffff;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2), 0 5px 10px rgba(0, 0, 0, 0.1);
+  z-index: 9999;
+  overflow: hidden;
+}
+
+.dropdown-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 10px 16px;
+  background: none;
+  border: none;
+  text-align: left;
+  font-size: 14px;
+  color: #374151;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.dropdown-item:hover {
+  background: #f9fafb;
+}
+
+.dropdown-item .item-icon {
+  font-size: 16px;
+  color: #6b7280;
+}
+
+.dropdown-item.danger {
+  color: #dc2626;
+}
+
+.dropdown-item.danger:hover {
+  background: #fee2e2;
+}
+
+.dropdown-item.danger .item-icon {
+  color: #dc2626;
+}
+
+/* Empty State */
+.empty-row td {
+  padding: 48px 24px !important;
+  text-align: center !important;
+}
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: #9ca3af;
+}
+
+.empty-icon {
+  font-size: 48px;
+  margin-bottom: 12px;
+  color: #d1d5db;
+}
+
+.empty-state p {
+  font-size: 14px;
+  margin: 0;
+}
+
+/* Simple Paginator */
+.paginator {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  background: #f9fafb;
+  border-top: 1px solid #e5e7eb;
+}
+
+.page-info {
+  font-size: 13px;
+  color: #6b7280;
+}
+
+.page-controls {
+  display: flex;
+  gap: 8px;
+}
+
+.page-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  color: #6b7280;
+}
+
+.page-btn:hover:not(:disabled) {
+  background: #9b51e0;
+  border-color: #9b51e0;
+  color: white;
+}
+
+.page-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .table-container {
+    overflow-x: scroll;
+  }
+
+  .simple-table {
+    min-width: 700px;
+  }
+
+  .paginator {
+    flex-direction: column;
+    gap: 12px;
+  }
+  
+  /* Ensure checkbox column remains visible on mobile */
+  .simple-table thead th:first-child,
+  .simple-table tbody td:first-child {
+    position: sticky;
+    left: 0;
+    background: #f9fafb;
+    z-index: 1;
+  }
+  
+  .simple-table tbody tr:nth-child(even) td:first-child {
+    background: #f9fafb;
+  }
+  
+  .simple-table tbody tr:hover td:first-child {
+    background: #f3f4f6;
+  }
+  
+  /* Sticky actions column on mobile */
+  .simple-table thead th:last-child,
+  .simple-table tbody td:last-child {
+    position: sticky;
+    right: 0;
+    background: #f9fafb;
+    z-index: 1;
+  }
+  
+  .simple-table tbody tr:nth-child(even) td:last-child {
+    background: #f9fafb;
+  }
+  
+  .simple-table tbody tr:hover td:last-child {
+    background: #f3f4f6;
+  }
+}
+
+/* Custom Scrollbar */
+.table-container::-webkit-scrollbar {
+  height: 6px;
+}
+
+.table-container::-webkit-scrollbar-track {
+  background: #f3f4f6;
+}
+
+.table-container::-webkit-scrollbar-thumb {
+  background: rgba(155, 81, 224, 0.3);
+  border-radius: 3px;
+}
+
+.table-container::-webkit-scrollbar-thumb:hover {
+  background: rgba(155, 81, 224, 0.5);
+}
